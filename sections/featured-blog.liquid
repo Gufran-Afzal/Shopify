@@ -1,0 +1,852 @@
+{%- liquid
+  assign section_prefix_class = 'featured-blog'
+  assign section_scheme_class = section.settings.section_color_scheme | prepend: 'scheme scheme--'
+  assign max_blogs_to_show = section.settings.number_of_columns_on_desktop | times: section.settings.number_of_rows_on_desktop
+
+  capture show_more_button
+    if section.settings.section_blog.articles_count > max_blogs_to_show
+      echo 'true'
+      else
+        echo 'false'
+    endif
+  endcapture
+
+  capture loading_attr
+    unless section.index != 1
+      echo 'eager'
+      else
+        echo 'lazy'
+    endunless
+  endcapture
+-%}
+{%- style -%}
+  .pagination-wrapper{
+    padding-left: var(--cp-spacer-left, 15px);
+    padding-right: var(--cp-spacer-right, 15px);
+  }
+
+  .pagination_list {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pagination_next-pg{
+    margin-right: 9.6px;
+  }
+
+  .pagination_back-pg{
+    margin-left: 9.6px;
+  }
+
+  .pagination_item{
+    border: 1px solid var(--section-border-color);
+    border-radius: 4px;
+  }
+
+  .pagination_link {
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 2rem;
+    transition: color 0.35s ease;
+    padding: 0.5rem 1rem;
+    display: block;
+  }
+
+  a.pagination_link--active{
+    background-color: var(--section-active-hover-color);
+    color: var(--section-background-color);
+  }
+
+  .pagination-wrapper{
+    margin-top: 47px;
+  }
+
+  .pagination-wrapper,
+  .pagination,
+  .pagination_list{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .load-more_button{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .load-more_loader{
+    line-height: 1rem;
+  }
+
+  .blog-card_image{
+    position: relative;
+    border-radius: calc(var(--section-radius) / 2);
+    overflow: hidden;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  a.blog-card_image:focus-visible{
+    --focus-outline-offset: 1px;
+  }
+
+  .blog-card_image svg,
+  .blog-card_image img{
+    border-radius: inherit;
+  }
+
+  .blog-card_heading {
+    --headings-font-weight: 500;
+  }
+
+  .blog-card_heading a{
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .blog-card_tags-list,
+  .blog-card_stats-wrap,
+  .blog-card_subtitle,
+  .blog-card{
+    display: flex;
+  }
+
+  .blog-card_subtitle,
+  .blog-card_stats-wrap{
+    flex-wrap: wrap;
+  }
+
+  .--tag-full{
+    margin-top: 21px;
+  }
+
+  .--normal-tag{
+    margin-top: 15px;
+  }
+
+  .blog-card_tags-list{
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .blog-card_tag-item{
+    flex-shrink: 0;
+  }
+
+  .blog-card_tags-list,
+  .blog-card_stats-wrap,
+  .blog-card_subtitle{
+    gap: 10px;
+  }
+
+  .--comments,
+  .--normal-gap{
+    margin-top: 10px;
+  }
+
+  .--margin-date{
+    --mt-bottom: 7px;
+  }
+
+  .--excerpt{
+    --mt-top: 19px;
+  }
+
+  .blog-card_tag-link{
+    padding: 7px 13px;
+    border-radius: calc(var(--section-radius) + 100px);
+    background-color: var(--section-widget-background-color);
+    color: var(--section-widget-foreground-color);
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    display: block;
+    font-weight: 400;
+  }
+
+  .blog-card_stats-wrap,
+  .blog-card_tag-link {
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+  }
+
+  .blog-card_subtitle{
+    align-items: center;
+  }
+
+  .blog-card_subtitle{
+    font-weight: 400;
+  }
+
+  .blog-card_subtitle + .blog-card_subtitle::before{
+    content: "-";
+    background: var(--section-foreground-color);
+    flex-shrink: 0;
+    pointer-events: none;
+    line-height: 0;
+    margin-left: 3px;
+    margin-right: 3px;
+  }
+
+  .blog-card_subtitle:last-child:not(:nth-child(2))::before{
+    display: none;
+  }
+
+  .blog-card{
+    flex-direction: column;
+  }
+
+  .blog-card_top-wrap{
+    flex-grow: 1;
+  }
+
+  .blog-card,
+  .blog-card_subtitle--comments-count{
+    width: 100%;
+  }
+
+  .blog-card_read-more{
+    margin-left: 3px;
+    padding: 3px;
+    text-decoration: none;
+  }
+
+  .featured-blog {
+    --desktop-columns-count: 1;
+    --q-align-value: var(--mobile-q-align);
+    --q-justify-value: var(--mobile-justify-align);
+  }
+
+  .featured-blog .heading-head {
+    width: 100%;
+    margin-bottom: 48px;
+  }
+
+  .featured-blog_grid .grid_col {
+    display: flex;
+  }
+
+  .featured-blog_description {
+    --mt-top: 12px;
+  }
+
+  .featured-blog_foot,
+  .featured-blog .splide-controls {
+    margin-top: 32px;
+  }
+
+  .featured-blog .splide__slide {
+    display: flex;
+  }
+
+  .featured-blog_slider .blog-card .button {
+    --focus-outline-offset: -3px;
+  }
+
+  .featured-blog_slider .blog-card {
+    margin-top: 2px;
+  }
+
+  @media (min-width: 576px){
+    .pagination_link {
+      padding: 0.8rem 1.2rem;
+    }
+  }
+
+  @media (min-width: 768px){
+    .featured-blog {
+      --desktop-columns-count: 3;
+      --q-align-value: var(--desktop-q-align);
+      --q-justify-value: var(--desktop-justify-align);
+    }
+  }
+
+  @media (min-width: 992px){
+    .pagination-wrapper{
+      margin-top: 78px;
+    }
+  }
+
+  @media (min-width: 1200px){
+    .featured-blog {
+      --desktop-columns-count: var(--columns-count);
+    }
+
+    .featured-blog_grid {
+      --cp-spacer-left: 23px;
+      --cp-spacer-right: 23px;
+    }
+  }
+  {%- assign query = '414px' -%}
+  @media (min-width: {{ query }}) and (max-width: 767px){
+    #{{ section.id }}{
+      --desktop-columns-count: {{ section.settings.number_of_columns_on_mobile }};
+    }
+  }
+{%- endstyle -%}
+<div class="global-block {{ section_prefix_class }} {{ section_prefix_class }}-{{ section.id }} {{ section_scheme_class }} --q-align" id="{{- section.id -}}" style="--section-padding-top: {{ section.settings.section_top_padding }}px; --section-padding-bottom: {{ section.settings.section_bottom_padding }}px; --columns-count: {{ section.settings.number_of_columns_on_desktop }}; --mobile-columns-count: {{ section.settings.number_of_columns_on_mobile }}; --mobile-q-align: {{ section.settings.section_mobile_text_alignment }}; --desktop-q-align: {{ section.settings.section_text_alignment }};">
+  <div class="container">
+    <div class="{{ section_prefix_class }}_wrapper">
+      {%- if section.settings.heading != blank or section.settings.section_description != blank -%}
+        <header class="heading-head">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="{{ section_prefix_class }}_heading {{ section.settings.section_heading_size }} {{ section.settings.section_heading_weight }} mty">
+              {{- section.settings.heading -}}
+            </h2>
+          {%- endif -%}
+          {%- if section.settings.section_description != blank -%}
+            <div class="{{ section_prefix_class }}_description --word-break {{ section.settings.section_text_size }} {{ section.settings.section_description_weight }} mty">
+              <p>{{- section.settings.section_description -}}</p>
+            </div>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+      {%- if section.settings.section_blog.articles_count > 0 -%}
+        {%- if section.settings.enable_slideshow -%}
+          <splide-slider
+            data-slider-type="default"
+          >
+            <div class="splide {{ section_prefix_class }}_slider"
+              data-splide='{
+                "drag": true,
+                "autoplay": {{- section.settings.auto_play -}},
+                "rewind": true,
+                "gap": "30px",
+                "perMove": 1,
+                "perPage": 1,
+                "padding": "3px",
+                "arrows": {{- section.settings.show_navigation -}},
+                "pagination": {{- section.settings.show_pagination -}},
+                "mediaQuery": "min",
+                  "breakpoints": {
+                    "414": {
+                      "perPage": {{ section.settings.number_of_columns_on_mobile }}
+                    },
+                    "768": {
+                      "perPage": 2
+                    },
+                    "992": {
+                      "perPage": 3
+                    },
+                    "1200": {
+                      "perPage": {{ section.settings.number_of_columns_on_desktop }}
+                    }
+                  },
+                "type": "loop"
+              }'
+            >
+              <div class="splide__track">
+                <div class="splide__list" style="--init-divider: {{ section.settings.number_of_columns_on_desktop }}; --init-mob-divider: {{ section.settings.number_of_columns_on_mobile }};">
+                  {%- for article in section.settings.section_blog.articles limit: max_blogs_to_show -%}
+                    <div class="splide__slide">
+                      {%- render 'blog-card',
+                        article: article,
+                        show_image: section.settings.show_featured_image,
+                        show_date: section.settings.show_date,
+                        show_author: section.settings.show_author,
+                        show_excerpt: section.settings.show_excerpt,
+                        show_tags: section.settings.show_tags,
+                        show_comments_count: section.settings.show_comments_count,
+                        prefix_class: section_scheme_class,
+                        loading_attr: loading_attr
+                      -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </div>
+              {%- if section.settings.show_navigation or section.settings.show_pagination -%}
+                <div class="splide-controls splide__arrows --justify-center">
+                  {%- if section.settings.show_navigation -%}
+                    <button class="splide__arrow splide__arrow--prev button button--primary button--icn">
+                      <span class="visually-hidden">{{- 'accessibility.slider.previous' | t -}}</span>
+                      {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'left-arrow' -%}
+                    </button>
+                  {%- endif -%}
+                  <ul
+                    class="splide__pagination"
+                    role="tablist"
+                    aria-label="{{- 'accessibility.slider.pagination_label' | t -}}"
+                  ></ul>
+                  {%- if section.settings.show_navigation -%}
+                    <button class="splide__arrow splide__arrow--next button button--primary button--icn">
+                      <span class="visually-hidden">{{- 'accessibility.slider.next' | t -}}</span>
+                      {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'right-arrow' -%}
+                    </button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </splide-slider>
+        {%- else -%}
+          <div class="grid {{ section_prefix_class }}_grid">
+            {%- for article in section.settings.section_blog.articles limit: max_blogs_to_show -%}
+              <div class="grid_col">
+                {%- render 'blog-card',
+                  article: article,
+                  show_image: section.settings.show_featured_image,
+                  show_date: section.settings.show_date,
+                  show_author: section.settings.show_author,
+                  show_excerpt: section.settings.show_excerpt,
+                  show_tags: section.settings.show_tags,
+                  show_comments_count: section.settings.show_comments_count,
+                  prefix_class: section_scheme_class,
+                  loading_attr: loading_attr
+                -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        {%- if section.settings.enable_slideshow -%}
+          <splide-slider
+            data-slider-type="default"
+          >
+            <div class="splide {{ section_prefix_class }}_slider"
+              data-splide='{
+                "drag": true,
+                "autoplay": {{- section.settings.auto_play -}},
+                "rewind": true,
+                "gap": "30px",
+                "perMove": 1,
+                "perPage": 1,
+                "padding": "3px",
+                "arrows": {{- section.settings.show_navigation -}},
+                "pagination": {{- section.settings.show_pagination -}},
+                "mediaQuery": "min",
+                  "breakpoints": {
+                    "414": {
+                      "perPage": {{ section.settings.number_of_columns_on_mobile }}
+                    },
+                    "768": {
+                      "perPage": 2
+                    },
+                    "992": {
+                      "perPage": 3
+                    },
+                    "1200": {
+                      "perPage": {{ section.settings.number_of_columns_on_desktop }}
+                    }
+                  }
+                "type": "loop"
+              }'
+            >
+              <div class="splide__track">
+                <div class="splide__list splide-slider--h-scroll" style="--init-divider: {{ section.settings.number_of_columns_on_desktop }} --init-mob-divider: {{ section.settings.number_of_columns_on_mobile }};;">
+                  {%- for article in (1..max_blogs_to_show) -%}
+                    <div class="splide__slide">
+                      {%- render 'blog-card-placeholder',
+                        index: forloop.index,
+                        show_image: section.settings.show_featured_image,
+                        show_date: section.settings.show_date,
+                        show_author: section.settings.show_author,
+                        show_excerpt: section.settings.show_excerpt,
+                        show_tags: section.settings.show_tags,
+                        show_comments_count: section.settings.show_comments_count,
+                        prefix_class: section_scheme_class,
+                        loading_attr: loading_attr
+                      -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </div>
+              {%- if section.settings.show_navigation or section.settings.show_pagination -%}
+                <div class="splide-controls splide__arrows --justify-center">
+                  {%- if section.settings.show_navigation -%}
+                    <button class="splide__arrow splide__arrow--prev button button--primary button--icn">
+                      <span class="visually-hidden">{{- 'accessibility.slider.previous' | t -}}</span>
+                      {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'left-arrow' -%}
+                    </button>
+                  {%- endif -%}
+                  <ul
+                    class="splide__pagination"
+                    role="tablist"
+                    aria-label="{{- 'accessibility.slider.pagination_label' | t -}}"
+                  ></ul>
+                  {%- if section.settings.show_navigation -%}
+                    <button class="splide__arrow splide__arrow--next button button--primary button--icn">
+                      <span class="visually-hidden">{{- 'accessibility.slider.next' | t -}}</span>
+                      {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'right-arrow' -%}
+                    </button>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </splide-slider>
+        {%- else -%}
+          <div class="grid {{ section_prefix_class }}_grid">
+            {%- for article in (1..max_blogs_to_show) -%}
+              <div class="grid_col">
+                {%- render 'blog-card-placeholder',
+                  index: forloop.index,
+                  show_image: section.settings.show_featured_image,
+                  show_date: section.settings.show_date,
+                  show_author: section.settings.show_author,
+                  show_excerpt: section.settings.show_excerpt,
+                  show_tags: section.settings.show_tags,
+                  show_comments_count: section.settings.show_comments_count,
+                  prefix_class: section_scheme_class,
+                  loading_attr: loading_attr
+                -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+      {%- if section.settings.enable_show_more_button and show_more_button == 'true' -%}
+        <footer class="{{ section_prefix_class }}_foot --align-center">
+          <a
+            href="{{- section.settings.section_blog.url -}}"
+            class="button button--{{ section.settings.view_more_type }} {{ section_prefix_class }}_btn-more"
+          >
+            {%- if section.settings.view_more_label != blank -%}
+              {{- section.settings.view_more_label | escape -}}
+            {%- else -%}
+              {{- 'blogs.view_all_button_label' | t -}}
+            {%- endif -%}
+          </a>
+        </footer>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.featured_blog.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header", 
+      "footer",
+      "custom.overlay"
+    ]
+  },
+  "settings": [
+    {
+      "type": "blog",
+      "label": "t:sections.featured_blog.settings.blog.label",
+      "id": "section_blog"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:heading.label",
+      "default": "Featured blog"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_size",
+      "label": "t:sizes.heading.label",
+      "options": [
+        {
+          "value": "h1",
+          "label": "t:sizes.heading.options.opt_1.label"
+        },
+        {
+          "value": "h2",
+          "label": "t:sizes.heading.options.opt_2.label"
+        },
+        {
+          "value": "h3",
+          "label": "t:sizes.heading.options.opt_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sizes.heading.options.opt_4.label"
+        }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_weight",
+      "label": "t:weight.heading.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-bold"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "section_description",
+      "label": "t:description_text.label",
+      "default": "The pieces stand out for their contemporary straight lines and imposing presence. Current, following the world trend of the masters, the sophisticated"
+    },
+    {
+      "type": "select",
+      "id": "section_text_size",
+      "label": "t:sizes.description_text.label",
+      "options": [
+        {
+          "value": "text-size--small",
+          "label": "t:sizes.text.options.opt_1.label"
+        },
+        {
+          "value": "text-size--medium",
+          "label": "t:sizes.text.options.opt_2.label"
+        },
+        {
+          "value": "text-size--large",
+          "label": "t:sizes.text.options.opt_3.label"
+        },
+        {
+          "value": "text-size--xlarge",
+          "label": "t:sizes.text.options.opt_4.label"
+        }
+      ],
+      "default": "text-size--small"
+    },
+    {
+      "type": "select",
+      "id": "section_description_weight",
+      "label": "t:weight.description_text.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        },
+        {
+          "value": "--fw-light",
+          "label": "t:weight.heading.options.opt_4.label"
+        }
+      ],
+      "default": "--fw-light"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_show_more_button",
+      "label": "t:sections.featured_blog.settings.view_more_button.label",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_more_label",
+      "label": "t:sections.featured_blog.settings.view_more_button.button_label.label"
+    },
+    {
+      "type": "select",
+      "id": "view_more_type",
+      "label": "t:settings_schema.buttons.settings.button.type.label",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:settings_schema.buttons.settings.button.type.opt_1.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:settings_schema.buttons.settings.button.type.opt_2.label"
+        }
+      ],
+      "default": "secondary"
+    },
+    {
+      "type": "header",
+      "content": "t:grid.content"
+    },
+    {
+      "type": "range",
+      "id": "number_of_columns_on_desktop",
+      "label": "t:grid.desktop.columns.label",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "number_of_rows_on_desktop",
+      "label": "t:grid.desktop.rows.label",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "select",
+      "id": "number_of_columns_on_mobile",
+      "label": "t:grid.mobile.columns.label",
+      "info": "t:grid.mobile.info_small",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:grid.mobile.columns.options.opt_1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:grid.mobile.columns.options.opt_2.label"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured_blog.settings.blog_card.content"
+    },
+    {
+      "type": "select",
+      "id": "card_media_size",
+      "label": "t:media.label",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:media.options.opt_1.label"
+        },
+        {
+          "value": "square",
+          "label": "t:media.options.opt_2.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:media.options.opt_3.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:media.options.opt_4.label"
+        }
+      ],
+      "default": "adapt"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_image",
+      "label": "t:sections.featured_blog.settings.blog_card.featured_image.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "t:sections.featured_blog.settings.blog_card.tags.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "t:sections.featured_blog.settings.blog_card.date.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "t:sections.featured_blog.settings.blog_card.author.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "t:sections.featured_blog.settings.blog_card.excerpt.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments_count",
+      "label": "t:sections.featured_blog.settings.blog_card.comments_count.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:layout.content"
+    },
+    {
+      "type": "text_alignment",
+      "id": "section_text_alignment",
+      "label": "t:alignments.text.desktop.label",
+      "default": "center"
+    },
+    {
+      "type": "text_alignment",
+      "id": "section_mobile_text_alignment",
+      "label": "t:alignments.text.mobile.label",
+      "default": "center"
+    },
+    {
+      "type": "color_scheme",
+      "id": "section_color_scheme",
+      "default": "scheme1",
+      "label": "t:color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:slideshow.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slideshow",
+      "label": "t:slideshow.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_play",
+      "label": "t:slideshow.auto_play.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "t:slideshow.show_arrows.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "t:slideshow.show_nav.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:spacing.content"
+    },
+    {
+      "type": "range",
+      "id": "section_top_padding",
+      "label": "t:spacing.settings.top.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_bottom_padding",
+      "label": "t:spacing.settings.bottom.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 60,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_blog.name"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-search",
+      "settings": {
+      }
+    },
+    "image_gallery": {
+      "type": "image-gallery",
+      "blocks": {
+        "image_one": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_two": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_three": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "image_one",
+        "image_two",
+        "image_three"
+      ],
+      "settings": {
+        "section_heading": "",
+        "section_heading_size": "h3",
+        "section_heading_weight": "--fw-bold",
+        "section_description": "",
+        "description_text_size": "text-size--large",
+        "section_description_weight": "--fw-normal",
+        "max_header_size": 100,
+        "caption_content_alignment": "mcenter",
+        "caption": "Follow on Instagram",
+        "button_label": "@HANDY ON INSTAGRAM",
+        "type": "secondary",
+        "url": "",
+        "open_new_window": true,
+        "section_full_width": true,
+        "remove_grid_spacing": true,
+        "section_text_alignment": "center",
+        "section_color_scheme": "",
+        "marquee_speed": 15,
+        "marquee_direction": "marquee_backward",
+        "marquee_on_hover": false,
+        "section_top_padding": 60,
+        "section_bottom_padding": 60
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_gallery"
+  ]
+}

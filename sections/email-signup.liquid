@@ -1,0 +1,576 @@
+{%- liquid
+  assign section_prefix_class = 'email-signup'
+
+  capture loading_attr
+    unless section.index != 1
+      echo 'eager'
+      else
+        echo 'lazy'
+    endunless
+  endcapture
+-%}
+{%- style -%}
+  .newsletter-form_label{
+    margin-bottom: 17px;
+    display: block;
+  }
+
+  .newsletter-form_group-wrap{
+    position: relative;
+  }
+
+  .newsletter-form_group-wrap input{
+    --outline-width: 2px;
+  }
+
+  .button--icn.newsletter-form_btn{
+    --btn-icn-bg: var(--section-input-background-color);
+    --btn-icn-txt: var(--section-input-text-color);
+    --btn-icn-hover-txt: var(--section-input-text-color);
+    --btn-icn-hover-bg: var(--section-input-background-color);
+    --btn-icn-bdr: var(--section-input-background-color);
+    --btn-icn-hover-bdr: var(--section-input-background-color);
+    position: absolute;
+    top: 50%;
+    right: 23px;
+    transform: translateY(-50%);
+    transition: 0.3s ease;
+  }
+
+  .button--icn.newsletter-form_btn:hover {
+    transform: translate(7px, -50%);
+  }
+
+  .email-signup.email-signup--full-size,
+  .email-signup:not(.email-signup--full-size) .email-signup_wrapper{
+    --link-color: var(--section-links-color);
+    --link-hover-color: var(--section-active-hover-color);
+    --border-color: var(--section-border-color);
+    --headings-color: var(--section-heading-color);
+    color: var(--section-foreground-color);
+    background-color: var(--section-background-color);
+  }
+
+  .email-signup .icn-box{
+    --spacer: calc(var(--block-spacing) * 0.6);
+    margin-bottom: var(--spacer);
+  }
+
+  .box-aside_banner{
+    height: 375px;
+    margin-top: 30px;
+  }
+
+  .email-signup_error-wrapper,
+  .box-aside_banner{
+    line-height: 0;
+  }
+
+  .icn-box_image,
+  .box-aside_banner{
+    position: relative;
+  }
+
+  .icn-box_image{
+    width: 48px;
+    height: 48px;
+  }
+
+  .email-signup:not(.email-signup--full-size) .email-signup_wrapper{
+    padding: 40px 15px;
+  }
+
+  .email-signup_col--description {
+    flex-grow: 1;
+  }
+
+  .email-signup_col--box,
+  .icn-box_image{
+    flex-shrink: 0;
+  }
+
+  .email-signup_form,
+  .icn-box,
+  .email-signup_error-wrapper{
+    display: flex;
+  }
+
+  .icn-box{
+    gap: 29px;
+  }
+
+  .icn-box,
+  .email-signup_error-wrapper{
+    align-items: center;
+  }
+
+  .email-signup_form-wrap--centered,
+  .email-signup_col--box,
+  .email-signup_form-wrap{
+    width: 100%;
+  }
+
+  .email-signup_form-wrap--centered{
+    max-width: 500px;
+    margin: auto;
+  }
+
+  .email-signup_caption-title p{
+    margin-bottom: 0;
+  }
+
+  .email-signup_error-wrapper{
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    color: var(--section-error-color)
+  }
+
+  .email-signup .success-message {
+    text-align: center;
+    margin-top: 39px;
+    font-size: 2rem;
+    line-height: 3.3rem;
+    color: var(--section-success-color);
+  }
+
+  .email-signup .success-message p {
+    margin: 0;
+  }
+
+  .email-signup .success-message .image{
+    margin-bottom: 10px;
+  }
+
+  .footer .success-message_icn {
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .email-signup:not(.email-signup--full-size) .email-signup_wrapper{
+      padding: 40px 37px;
+    }
+
+    .email-signup .icn-box{
+      --spacer: var(--block-spacing);
+    }
+
+    .email-signup_wrapper {
+      display: flex;
+      gap: 25px;
+    } 
+
+    .email-signup_col--box{
+      width: 53%;
+    }
+
+    .box-aside_banner{
+      margin-top: 0;
+    }
+  } 
+
+  @media (min-width: 1200px) {
+    .email-signup_col--description{
+      padding-left: 44px;
+      padding-right: 44px;
+    }
+  }
+{%- endstyle -%}
+<div class="global-block {{ section_prefix_class }} {{ section_prefix_class }}-{{ section.id }} scheme--{{ section.settings.section_color_scheme }} {% if section.settings.section_full_width %}{{ section_prefix_class }}--full-size{% endif %}" style="--section-padding-top: {{ section.settings.section_top_padding }}px; --section-padding-bottom: {{ section.settings.section_bottom_padding }}px;">
+  <div class="container">
+    <div class="{{ section_prefix_class }}_wrapper --v-align-{{ section.settings.content_alignment }}">
+      <div class="{{ section_prefix_class }}_col {{ section_prefix_class }}_col--description">
+        <div class="{{ section_prefix_class }}_form">
+          <div class="{{ section_prefix_class }}_form-wrap {% unless section.settings.show_image == 'true' %}{{ section_prefix_class }}_form-wrap--centered{% endunless %}">
+            {%- for block in section.blocks -%}
+              {%- liquid
+                capture image_alt
+                  unless block.settings.icn_image == blank
+                    echo block.settings.icn_image
+                    else
+                      echo 'email_signup.image_alt' | t: index: forloop.index
+                  endunless
+                endcapture 
+              -%}
+              <div class="icn-box" style="--block-spacing: {{ block.settings.block_spacing }}px;" {{ block.shopify_attributes }}>
+                {%- if block.settings.icn_image != blank -%}
+                  {%- assign image_height = 48 | divided_by: block.settings.icn_image.aspect_ratio | round -%}
+                  <div class="icn-box_image">
+                    {{- block.settings.icn_image | image_url: width: 72 | image_tag:
+                      sizes: '(max-width: 767px) 48px, 72px',
+                      width: 48,
+                      height: image_height,
+                      alt: image_alt,
+                      widths: '48, 72',
+                      loading: loading_attr
+                    -}}
+                  </div>
+                  {%- else -%}
+                    <div class="icn-box_image">
+                      {{- 'hero-apparel-1' | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+                    </div>
+                {%- endif -%}
+                {%- if block.settings.heading != blank or block.settings.description != blank -%}
+                  <header class="heading-head">
+                    {%- if block.settings.heading != blank -%}
+                      <h2 class="{{ section_prefix_class }}_heading {{ section.settings.block_heading_weight }} {{ section.settings.block_heading_size }} --h-anchor-none mty">
+                        {{- block.settings.heading -}}
+                      </h2>
+                    {%- endif -%}
+                    {%- if block.settings.description != blank -%}
+                      <div class="{{ section.settings.block_description_size }} {{ section.settings.block_description_weight }} {{ section_prefix_class }}_caption-title --word-break">
+                        {{- block.settings.description -}}
+                      </div>
+                    {%- endif -%}
+                  </header>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+            {%- liquid
+              assign id = 'email-signup-' | append: section.id
+              render 'newsletter-form', section_prefix_class: section_prefix_class, form_id: id
+            -%}
+          </div>
+        </div>
+      </div>
+      {%- if section.settings.show_image -%}
+        <div class="{{ section_prefix_class }}_col {{ section_prefix_class }}_col--box">
+          {%- if section.settings.banner_image != blank -%}
+            {%- liquid
+              capture image_alt
+                if section.settings.banner_image.alt != blank
+                  echo section.settings.banner_image.alt
+                  else
+                    echo section.settings.heading | escape
+                endif
+              endcapture
+
+              assign image_height = 896 | divided_by: section.settings.banner_image.aspect_ratio | round
+            -%}
+            <div class="box-aside_banner">
+              {{- section.settings.banner_image | image_url: width: 896 | image_tag:
+                loading: loading_attr,
+                class: 'object-fit object-fit--absolute',
+                alt: image_alt,
+                width: 896,
+                height: image_height,
+                widths: '260, 354, 471, 597, 707, 896',
+                sizes: '(max-width: 767px) calc(100vw - 60px), (max-width: 1259px) calc((100vw * 53 / 100) - 55px), calc((var(--cp-width-px) * 53 / 100) - 55px)'
+              -}}
+            </div>
+            {%- else -%}
+            <div class="box-aside_banner">
+              {{- 'hero-apparel-1' | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.email_signup.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "custom.overlay"
+    ]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "t:sections.email_signup.settings.additional.banner.label",
+      "info": "t:sections.email_signup.settings.additional.banner.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "t:sections.email_signup.settings.additional.banner.show_image.label",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:heading.label",
+      "default": "Newsletter"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_size",
+      "label": "t:sizes.heading.label",
+      "options": [
+        {
+          "value": "h3",
+          "label": "t:sizes.heading.options.opt_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sizes.heading.options.opt_4.label"
+        },
+        {
+          "value": "h5",
+          "label": "t:sizes.heading.options.opt_5.label"
+        },
+        {
+          "value": "h6",
+          "label": "t:sizes.heading.options.opt_6.label"
+        }
+      ],
+      "default": "h6"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_weight",
+      "label": "t:weight.heading.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-semi-bold"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.email_signup.blocks.name"
+    },
+    {
+      "type": "select",
+      "id": "block_heading_size",
+      "label": "t:sizes.heading.label",
+      "options": [
+        {
+          "value": "h3",
+          "label": "t:sizes.heading.options.opt_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sizes.heading.options.opt_4.label"
+        },
+        {
+          "value": "h5",
+          "label": "t:sizes.heading.options.opt_5.label"
+        },
+        {
+          "value": "h6",
+          "label": "t:sizes.heading.options.opt_6.label"
+        }
+      ],
+      "default": "h6"
+    },
+    {
+      "type": "select",
+      "id": "block_heading_weight",
+      "label": "t:weight.heading.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-semi-bold"
+    },
+    {
+      "type": "select",
+      "id": "block_description_size",
+      "label": "t:sizes.description_text.label",
+      "options": [
+        {
+          "value": "text-size--small",
+          "label": "t:sizes.text.options.opt_1.label"
+        },
+        {
+          "value": "text-size--medium",
+          "label": "t:sizes.text.options.opt_2.label"
+        },
+        {
+          "value": "text-size--large",
+          "label": "t:sizes.text.options.opt_3.label"
+        }
+      ],
+      "default": "text-size--small"
+    },
+    {
+      "type": "select",
+      "id": "block_description_weight",
+      "label": "t:weight.description_text.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        },
+        {
+          "value": "--fw-light",
+          "label": "t:weight.heading.options.opt_4.label"
+        }
+      ],
+      "default": "--fw-light"
+    },
+    {
+      "type": "header",
+      "content": "t:layout.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_full_width",
+      "label": "t:sections.full_width.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "t:alignments.content.desktop.label",
+      "options": [
+        {
+          "value": "top",
+          "label": "t:positions.options.top"
+        },
+        {
+          "value": "middle",
+          "label": "t:positions.options.middle"
+        },
+        {
+          "value": "bottom",
+          "label": "t:positions.options.bottom"
+        }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "color_scheme",
+      "id": "section_color_scheme",
+      "default": "scheme2",
+      "label": "t:color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:spacing.content"
+    },
+    {
+      "type": "range",
+      "id": "section_top_padding",
+      "label": "t:spacing.settings.top.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_bottom_padding",
+      "label": "t:spacing.settings.bottom.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.email_signup.blocks.name",
+      "type": "icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icn_image",
+          "label": "t:image.label"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:heading.label",
+          "default": "Free delivery"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "t:description_text.label",
+          "default": "<p>Get free shipping over $65.</p>"
+        },
+        {
+          "type": "range",
+          "id": "block_spacing",
+          "label": "t:bottom_margin.label",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "default": 25,
+          "unit": "px"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.email_signup.name",
+      "blocks": [
+        {
+          "type": "icon",
+          "settings": {
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+            "heading": "Deliver From Canada",
+            "description": "<p>Get free shipping over $65.</p>"
+          }
+        },
+        {
+          "type": "icon",
+          "settings": {
+             "heading": "Trusted by Professionals",
+            "description": "<p>Within 30 days for an exchange.</p>",
+            "block_spacing": 50
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

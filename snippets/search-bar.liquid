@@ -1,0 +1,102 @@
+{%- comment -%}
+  renders search bar on page templates
+  usage
+    {%- render 'search-bar', predictive: true -%}
+{%- endcomment -%}
+<div class="search-bar {{ search_opened_logo_hide }} search-container-{{- section.id -}}">
+  <form action="{{- routes.search_url -}}" method="get" role="search">
+    <div class="search-bar_form-group">
+      <div class="search-bar_search-box">
+        <label for="search-bar-input-{{ section.id }}" class="visually-hidden">
+          {{- 'search.label' | t -}}
+        </label>
+        <input
+          type="search"
+          name="q"
+          title="{{- 'search.label' | t -}}"
+          autocomplete="off"
+          id="search-bar-input-{{ section.id }}"
+          value="{%- if search_value != blank -%}{{- search_value -}}{%- endif -%}"
+          placeholder="{{- 'search.placeholder' | t -}}"
+        >
+        <button type="submit" class="button button--icn search-bar_label">
+          <i class="button_icn-wrapper">
+            {%- render 'icons-data', width: 16, height: 16, use_icon: true, icon_reference: 'search', section_id: section_id -%}
+            <span class="visually-hidden">
+              {{- 'search.label' | t -}}
+            </span>
+          </i>
+        </button>
+        {%- if predictive -%}
+          <button type="button" class="button button--icn search-bar_reset-btn" data-dropdown-close-btn="">
+            <i class="button_icn-wrapper">
+              {%- render 'icons-data', width: 13, height: 13, use_icon: true, icon_reference: 'cross' -%}
+              <span class="visually-hidden">
+                {{- 'search.reset' | t -}}
+              </span>
+            </i>
+          </button>
+        {%- endif -%}
+    </div>
+    </div>
+    {%- if predictive -%}
+      <div class="predictive-container predictive-container--{{ section.id }}">
+        <div class="predictive-container_wrapper container">
+          <div class="predictive-container_col predictive-container_col--results">
+            <div data-render-predict-results="" class="hidden"></div>
+            {%- if predictive_collection != blank or predictive_collection.all_products_count > 0 -%}
+              <div class="predictive-collection">
+                <tabset-component>
+                  <div class="predictive-collection_content">
+                    <strong class="predictive-collection_title mty {{ heading_size }} {{ heading_weight }}">
+                      {%- liquid
+                        if predictive_heading != blank
+                          echo predictive_heading
+                          else
+                            echo 'search.heading' | t
+                        endif
+                      -%}
+                    </strong>
+                    <div class="predictive-collection_tabs" role="tablist" aria-label="Painting Categories">
+                      {%- for collection in predictive_collection  -%}
+                        <button type="button" class="button predictive-collection_tabs-btn" role="tab" aria-controls="panel-{{ collection.handle }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+                          {{ collection.title }}
+                        </button>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                  {%- for collection in predictive_collection -%}
+                    <div id="panel-{{ collection.handle }}" role="tabpanel" class="{% unless forloop.first %}hidden{% endunless %}">
+                      {%- if collection.products.size > 0 -%}
+                        <div class="grid predictive-collection_grid">
+                          {%- capture image_sizes -%}
+                            (max-width: 410px) width: calc((100vw / 2) - 38px), (max-width: 575px) width: calc((100vw / 2) - 38px), (max-width: 767px) width: calc((100vw / 3) - 54px), (max-width: 991px) width: calc((100vw / 4) - 54px), width: calc({{ settings.page_width | divided_by: 5 | round }}px - 54px);
+                          {%- endcapture -%}
+                          {%- for product in collection.products limit: 5 -%}
+                            <div class="grid_col">
+                              {%- render 'simple-product', product: product, prefix_class: 'predictive-collection', media_size: 'square'  -%}
+                            </div>
+                          {%- endfor -%}
+                        </div>
+                        {%- else -%}
+                          <div class="predictive-container_empty-content --align-left">
+                            <i class="predictive-container_icn">
+                              {%- render 'icons-data', width: 38, height: 38, use_icon: true, icon_reference: 'empty-box' -%}
+                            </i>
+                            <div class="predictive-container_empty-descr text-size--large mty">
+                              <p>{{ 'search.no_products' | t }}</p>
+                            </div>
+                          </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                </tabset-component>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+    <input type="hidden" name="options[prefix]" value="last">
+  </form>
+</div>

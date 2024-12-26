@@ -1,0 +1,368 @@
+{%- liquid
+  assign section_prefix_class = 'footer-top'
+  assign section_scheme_class = section.settings.section_color_scheme | prepend: 'scheme scheme--'
+
+  capture container_class
+    if section.settings.section_full_width
+      echo 'container-fluid'
+      else
+        echo 'container'
+    endif
+  endcapture
+  
+  capture strip_menu_layout_class
+    if section.settings.section_menu_layout == 'menu_vertical'
+      echo 'menu-strip--vertical'
+      else
+        echo ''
+    endif
+  endcapture
+
+  capture q_justify_mobile
+    case section.settings.section_mobile_text_alignment
+      when 'left'
+        echo 'flex-start'
+      when 'center'
+        echo 'center'
+      when 'right'
+        echo 'flex-end'
+    endcase
+  endcapture
+
+  capture q_justify_desktop
+    case section.settings.section_text_alignment
+      when 'left'
+        echo 'flex-start'
+      when 'center'
+        echo 'center'
+      when 'right'
+        echo 'flex-end'
+    endcase
+  endcapture
+-%}
+
+{%- style -%}
+  .menu-strip ul,
+  .footer-top_follow-wrap{
+    display: flex;
+  }
+
+  .menu-strip ul{
+    gap: 30px;
+  }
+
+  .menu-strip ul,
+  .footer-top_follow-wrap{
+    flex-wrap: wrap;
+  }
+
+  .menu-strip_col{
+    margin-bottom: 30px;
+  }
+
+  .menu-strip--vertical{
+    flex-direction: column;
+  }
+
+  .menu-strip_heading{
+    --headings-font-weight: 600;
+    --mt-bottom: 15px;
+  }
+
+  .menu-strip ul{
+    row-gap: 10px;
+  }
+
+  .menu-strip ul a,
+  .footer-top .--mobile-img{
+    display: block;
+  }
+
+  .menu-strip ul a{
+    word-break: break-word;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    line-height: 2.4rem;
+  }
+
+  .footer-top {
+    --q-align-value: var(--mobile-q-align);
+    --q-justify-value: var(--mobile-justify-align);
+  }
+
+  .footer-top_logo{
+    display: inline-block;
+    position: relative;
+    padding-left: 32px;
+    padding-right: 39px;
+    margin-bottom: 15px;
+  }
+
+  .footer-top .--active{
+    color: var(--section-active-hover-color);
+    text-decoration: underline;
+  }
+
+  .footer-top_follow-wrap{
+    gap: 11px;
+  }
+
+  .footer-top .menu-strip_col:only-child,
+  .footer-top .menu-strip_col:last-child{
+    margin-bottom: 0;
+  }
+
+  .footer-top--modify {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+  .footer-top_wrapper{
+    padding-bottom: 19px;
+    padding-top: 21px;
+  }
+
+  .footer-top--bdr-top{
+    border-top: 1px solid var(--section-border-color);
+  }
+
+  .footer-top--bdr-bottom {
+    border-bottom: 1px solid var(--section-border-color);
+  }
+
+  .footer-top .--desktop-img{
+    display: none;
+  }
+
+  .footer-top .logo_heading{
+    font-size: 3rem;
+    line-height: 2.5rem;
+    font-weight: 400;
+  }
+
+  @media (min-width: 768px){
+    .footer-top {
+      --q-align-value: var(--desktop-q-align);
+      --q-justify-value: var(--desktop-justify-align);
+    }
+
+    .footer-top .--desktop-img{
+      display: block;
+    }
+
+    .footer-top .--mobile-img{
+      display: none;
+    }
+
+    .footer-top .logo_heading{
+      font-size: 3.5rem;
+      line-height: 3rem;
+    }
+  }
+
+  @media (min-width: 992px){
+    .menu-strip{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .menu-strip_col{
+      flex-grow: 1;
+      flex-basis: 0;
+      min-width: calc(50% - 15px);
+      margin-bottom: 0;
+    }
+  }
+{%- endstyle -%}
+<div class="global-block {{ section_prefix_class }} {{ section_prefix_class }}-{{ section.id }} {{ section_scheme_class }} --q-align" style="--section-padding-top: 0px; --section-padding-bottom: 0px; --mobile-q-align: {{ section.settings.section_mobile_text_alignment }}; --mobile-justify-align: {{ q_justify_mobile }}; --desktop-q-align: {{ section.settings.section_text_alignment }}; --desktop-justify-align: {{ q_justify_desktop }}; --logo-desktop-width: {{ section.settings.logo_desktop_width }}px; --logo-mobile-width: {{ section.settings.logo_mobile_width }}px;">
+  <div class="{{ container_class }}">
+    <div class="{{ section_prefix_class }}_wrapper --q-align-justify {% if section.settings.show_top_bdr %} {{ section_prefix_class }}--bdr-top{% endif %} {% if section.settings.show_bottom_bdr %} {{ section_prefix_class }}--bdr-bottom{% endif %}">
+      <div class="logo {{ section_prefix_class }}_logo">
+        {%- if request.page_type == 'index' -%}
+          <h3 class="logo_heading h2 mty">
+        {%- endif -%}
+            <a href="{{ routes.root_url }}" class="logo_link --word-break">
+              {%- liquid
+                assign logo_alt = section.settings.logo.alt | default: shop.name | escape
+                capture logo_height
+                  assign height = section.settings.logo_desktop_width | divided_by: section.settings.logo.aspect_ratio
+                  echo height | round
+                endcapture
+                capture logo_mob_height
+                  assign height = section.settings.logo_mobile_width | divided_by: section.settings.logo.aspect_ratio
+                  echo height | round
+                endcapture
+              -%}
+              {%- if section.settings.logo != blank -%}
+                {%- capture d_sizes -%}
+                  (max-width: {{ section.settings.logo_desktop_width | times: 2 }}px) 50vw, {{ section.settings.logo_desktop_width }}px
+                {%- endcapture -%}
+                {%- capture m_sizes -%}
+                  (max-width: {{ section.settings.logo_mobile_width | times: 2 }}px) 50vw, {{ section.settings.logo_mobile_width }}px
+                {%- endcapture -%}
+                {%- capture d_widths -%}
+                  {{ section.settings.logo_desktop_width }}, {{ section.settings.logo_desktop_width | times: 1.5 | round }}, {{ section.settings.logo_desktop_width | times: 2 }}
+                {%- endcapture -%}
+                {%- capture m_widths -%}
+                  {{ section.settings.logo_mobile_width }}, {{ section.settings.logo_mobile_width | times: 1.5 | round }}, {{ section.settings.logo_mobile_width | times: 2 }}
+                {%- endcapture -%}
+                {{- section.settings.logo | image_url: width: 532 | image_tag: class: '--desktop-img', widths: d_widths, height: logo_height, width: section.settings.logo_desktop_width, alt: logo_alt, sizes: d_sizes, loading: 'lazy' -}}
+                {{- section.settings.logo | image_url: width: 532 | image_tag: class: '--mobile-img', widths: m_widths, height: logo_mob_height, width: section.settings.logo_mobile_width, alt: logo_alt, sizes: m_sizes, loading: 'lazy' -}}
+                {%- else -%}
+                  {{- shop.name -}}
+              {%- endif -%}
+            </a>
+        {%- if request.page_type == 'index' -%}
+          </h3>
+        {%- endif -%}
+      </div>
+      <div class="{{ section_prefix_class }}_menu-strip {{ strip_menu_layout_class }} menu-strip">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              <div class="menu-strip_col" {{ block.shopify_attributes }}>
+                {%- if block.settings.menu.links != blank -%}
+                  <ul class="list-unstyled --q-align-justify {{ section_prefix_class }}--modify">
+                    {%- for link in block.settings.menu.links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="{% if link.current %}--active{% endif %}">{{- link.title | escape -}}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul> 
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.footer_top.name",
+  "tag": "section",
+  "limit": 1,
+  "enabled_on": {
+    "groups": [
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:site_logo.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:image.label",
+      "info": "t:site_logo.info"
+    },
+    {
+      "type": "range",
+      "id": "logo_desktop_width",
+      "label": "t:image.width.desktop.label",
+      "min": 100,
+      "max": 500,
+      "step": 5,
+      "default": 200,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "logo_mobile_width",
+      "label": "t:image.width.mobile.label",
+      "min": 90,
+      "max": 150,
+      "step": 1,
+      "default": 133,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "t:layout.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_bdr",
+      "label": "t:top_bdr.label",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_bdr",
+      "label": "t:bottom_bdr.label",
+      "default": true
+    },
+    {
+      "type": "text_alignment",
+      "id": "section_text_alignment",
+      "label": "t:alignments.text.desktop.label",
+      "default": "center"
+    },
+    {
+      "type": "text_alignment",
+      "id": "section_mobile_text_alignment",
+      "label": "t:alignments.text.mobile.label",
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "section_menu_layout",
+      "label": "t:sections.footer_top.settings.menu.layout.label",
+      "info": "t:sections.footer_top.settings.menu.layout.info",
+      "options": [
+        {
+          "value": "menu_horizontal",
+          "label": "t:sections.footer_top.settings.menu.layout.options.opt_1.label"
+        },
+        {
+          "value": "menu_vertical",
+          "label": "t:sections.footer_top.settings.menu.layout.options.opt_2.label"
+        }
+      ],
+      "default": "menu_vertical"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_full_width",
+      "label": "t:sections.full_width.label",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "section_color_scheme",
+      "default": "scheme1",
+      "label": "t:color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.footer_top.blocks.menu.name",
+      "type": "menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.footer_top.blocks.menu.label",
+          "info": "t:sections.footer_top.blocks.menu.info",
+          "default": "footer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.footer_top.name",
+      "blocks": [
+        {
+          "type": "menu",
+          "settings": {
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

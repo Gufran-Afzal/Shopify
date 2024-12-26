@@ -1,0 +1,52 @@
+{
+  "type": "footer",
+  "name": "Footer Group",
+  "sections": {
+    "footer_top": {
+      "type": "footer-top",
+      "settings": {
+      },
+      "blocks": {
+       "menu_1": {
+          "type": "menu",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "menu_1",
+      ]
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+      },
+      "blocks": {
+        "form": {
+          "type": "form",
+          "settings": {
+          }
+        },
+        "menu": {
+          "type": "menu",
+          "settings": {
+          }
+        },
+        "method": {
+          "type": "method",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "form",
+        "menu",
+        "method"
+      ]
+    }
+  },
+  "order": [
+    "footer_top",
+    "footer"
+  ]
+}

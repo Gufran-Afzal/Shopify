@@ -1,0 +1,533 @@
+{%- liquid
+  assign section_prefix_class = 'footer'
+  assign section_top_scheme_class = section.settings.footer_top_color_scheme | prepend: 'scheme scheme--'
+  assign section_bottom_scheme_class = section.settings.footer_bottom_color_scheme | prepend: 'scheme scheme--'
+-%}
+{% style %}
+  .footer{
+    --section-padding-top: 45px;
+    --section-padding-bottom: 42px;
+    overflow: hidden;
+    --desktop-columns-count: 1;
+  }
+
+  .footer_wapper{
+    row-gap: 15px;
+  }
+
+  .--active{
+    color: var(--section-active-hover-color);
+  }
+
+  .footer_navlist-link-text.--active{
+    text-decoration: underline;
+  }
+
+  .footer-bottom{
+    --section-padding-top: 18px;
+    --section-padding-bottom: 12px;
+  }
+
+  .footer .menu-strip_col{
+    min-width: 100%;
+  }
+
+  .footer_text,
+  .footer .success-message{
+    text-align: center;
+  }
+
+  .footer_text{
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    font-weight: 400;
+  }
+
+  .footer--bdr-bottom{
+    border-bottom: 1px solid var(--section-border-color);
+  }
+
+  .footer--bdr-top{
+    border-top: 1px solid var(--section-border-color);
+  }
+
+  .footer_navlist-link-text{
+    text-decoration: none;
+    font-size: 1.5rem;
+    line-height: 5rem;
+  }
+
+  .footer_menu-strip{
+    --cp-spacer-left: 0;
+    --cp-spacer-right: 0;
+  }
+
+  .footer-form_submit-btn{
+    width: 100%;
+    margin-top: 13px;
+  }
+
+  .footer_error-wrapper{
+    display: flex;
+    align-items: center;
+    line-height: 0;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    color: var(--section-error-color)
+  }
+
+  .footer .success-message {
+    margin-top: 39px;
+    font-size: 2rem;
+    line-height: 3.3rem;
+    color: var(--section-success-color);
+  }
+
+  .footer .success-message p {
+    margin: 0;
+  }
+
+  .footer .success-message .image{
+    margin-bottom: 10px;
+  }
+
+  .footer .footer_payments-list{
+    gap: 15px;
+  }
+
+  .footer .success-message_icn,
+  .footer_text,
+  .footer_navlist-link-text{
+    display: block;
+  }
+
+  .footer .success-message_icn {
+    margin-bottom: 14px;
+  }
+
+  .footer .socials-list--icns{
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .footer-form{
+    margin-top: 34px;
+  }
+
+  .footer_socials{
+    margin-top: 27px;
+  }
+
+  .footer_pay-methods-wrap{
+    margin-top: 14px;
+  }
+
+  .footer_follow-link{
+    margin-top: 48px;
+  }
+
+  .socials-list{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .socials-list--icns{
+    line-height: 0;
+    align-items: center;
+    gap: 14px;
+    justify-content: center;
+  }
+
+  .socials-list:empty{
+    display: none;
+  }
+
+  .list-social_link{
+    word-break: break-word;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: 1px solid transparent;
+  }
+
+  .list-social_link:hover{
+    border-color: var(--section-border-color);
+  }
+
+  .list-social_text-link{
+    text-decoration: none;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+  }
+
+  @media (min-width: 768px) {
+    .socials-list--icns{
+      gap: 21px;
+    }
+  }
+
+  @media (min-width:576px){
+    .footer{
+      --desktop-columns-count: 2;
+    }
+  }
+
+  @media (min-width: 992px){
+    .footer{
+      --desktop-columns-count: 3;
+    }
+
+    .footer_wapper{
+      --cp-spacer-left: 37px;
+      --cp-spacer-right: 37px;
+    }
+  }
+{%- endstyle -%}
+<div class="global-block {{ section_prefix_class }} {{ section_prefix_class }}-{{ section.id }} {{ section_top_scheme_class }}">
+  <div class="container">
+    <div class="{{ section_prefix_class }}_wapper grid">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'form' -%}
+            <div class="{{ section_prefix_class }}_col {{ section_prefix_class }}_col--uptoDate grid_col" {{ block.shopify_attributes }}>
+              {%- if block.settings.form_heading != blank -%}
+                <div class="{{ section_prefix_class }}_form-heading --word-break {{ section.settings.heading_size }} {{ section.settings.heading_weight }}">
+                  {{- block.settings.form_heading -}}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.form_description != blank -%}
+                <div class="{{ section_prefix_class }}_form-description --word-break {{ block.settings.form_description_size }} {{ block.settings.form_description_weight }}">
+                  {{- block.settings.form_description -}}
+                </div>
+              {%- endif -%}
+              {%- liquid
+                capture button_1_text
+                  if block.settings.button_label_1 != blank
+                    echo block.settings.button_label_1
+                    else
+                      echo 'footer.button_label' | t
+                  endif
+                endcapture
+                assign id = 'discount-popup-' | append: section.id
+                render 'footer-email-form', section_prefix_class: section_prefix_class, form_id: id, button_label: button_1_text 
+              -%}
+            </div>
+          {%- when 'menu' -%}
+            <div class="{{ section_prefix_class }}_col {{ section_prefix_class }}_col--menus grid_col" {{ block.shopify_attributes }}>
+              {%- if block.settings.menu_heading != blank -%}
+                <div class="{{ section_prefix_class }}_form-heading --word-break {{ section.settings.heading_size}} {{ section.settings.heading_weight }}">
+                  {{- block.settings.menu_heading -}}
+                </div>
+              {%- endif -%}
+              <div class="menu-strip_col {{ section_prefix_class }}_menu-strip grid_col" {{ block.shopify_attributes }}>
+                {%- if block.settings.menu.links != blank -%}
+                  <ul class="list-unstyled {{ section_prefix_class }}_navlist">
+                    {%- for link in block.settings.menu.links -%}
+                      <li class="{{ section_prefix_class }}_navlist-link">
+                        <a class="{{ section_prefix_class }}_navlist-link-text --fw-medium --word-break {% if link.current %}--active{% endif %}" href="{{ link.url }}">{{- link.title | escape -}}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul> 
+                {%- endif -%}
+              </div>
+            </div>
+          {%- when 'method' -%}
+            {%- liquid 
+              capture follow_exists
+                if shop.features.follow_on_shop? and block.settings.follow_on_shops
+                  echo 'true'
+                endif
+              endcapture
+              
+              capture enable_social_list
+                if settings.social_instagram_link != blank
+                  echo 'true'
+                  elsif settings.social_linkedin_link != blank
+                    echo 'true'
+                  elsif settings.social_facebook_link != blank
+                    echo 'true'
+                  elsif settings.social_youtube_link != blank
+                    echo 'true'
+                  elsif settings.social_twitter_link != blank
+                    echo 'true'
+                  elsif settings.social_snapchat_link != blank
+                    echo 'true'
+                  elsif settings.social_pinterest_link != blank
+                    echo 'true'
+                  elsif  settings.social_tiktok_link != blank
+                    echo 'true'
+                  elsif settings.social_tumblr_link != blank
+                    echo 'true'
+                  elsif settings.social_vimeo_link != blank
+                    echo 'true'
+                  else
+                    echo 'false'
+                endif
+              endcapture
+          
+              capture social_exists
+                if enable_social_list == 'true' and block.settings.show_social_links
+                  echo 'true'
+                endif
+              endcapture
+            -%}
+            <div class="{{ section_prefix_class }}_col {{ section_prefix_class }}_col--methods grid_col" {{ block.shopify_attributes }}>
+              {%- if block.settings.payment_heading != blank -%}
+                <div class="{{ section_prefix_class }}_form-heading --word-break {{ section.settings.heading_size }} {{ section.settings.heading_weight }}">
+                  {{- block.settings.payment_heading -}}
+                </div>
+              {%- endif -%}
+              {%- if block.settings.show_payment_icons -%}
+                <div class="{{ section_prefix_class }}_pay-methods-wrap">
+                  {%- render 'payment-icons' | prefix_class: section_prefix_class -%}
+                </div>
+              {%- endif -%}
+              {%- if follow_exists == 'true' -%}
+                <div class="{{ section_prefix_class }}_follow-link">
+                  {% # theme-check-disable %}
+                    {{- shop | login_button: action: 'follow' -}}
+                  {% # theme-check-enable %}
+                </div>
+              {%- endif -%}
+              {%- if social_exists == 'true' -%}
+                <div class="{{ section_prefix_class }}_socials">
+                  {%- render 'social-icons' | prefix_class:  section_prefix_class | social_icons_enable: true | social_extra_class: '--align-left'-%}
+                </div>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+<div class="global-block footer-bottom {{ section_prefix_class }}-{{ section.id }} {{ section_bottom_scheme_class }} {% if section.settings.show_top_bdr %}--bdr-top{% endif %}">
+  <div class="container">
+    <span class="{{ section_prefix_class }}_text --word-break">
+      Copyright &copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}} &nbsp; {{ powered_by_link }}
+    </span>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "tag": "footer",
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.head.content"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sizes.heading.label",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sizes.heading.options.opt_2.label"
+        },
+        {
+          "value": "h3",
+          "label": "t:sizes.heading.options.opt_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sizes.heading.options.opt_4.label"
+        },
+        {
+          "value": "h5",
+          "label": "t:sizes.heading.options.opt_5.label"
+        }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "t:weight.heading.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        },
+        {
+          "value": "--fw-light",
+          "label": "t:weight.heading.options.opt_4.label"
+        }
+      ],
+      "default": "--fw-bold"
+    },
+    {
+      "type": "header",
+      "content": "t:layout.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_bdr",
+      "label": "t:sections.footer.settings.show_top_footerbottom_border.label",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "footer_top_color_scheme",
+      "default": "scheme1",
+      "label": "t:sections.footer.settings.footer_top_color_scheme.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "footer_bottom_color_scheme",
+      "default": "scheme2",
+      "label": "t:sections.footer.settings.footer_bottom_color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.footer.blocks.stay_up_to_date.name",
+      "type": "form",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "form_heading",
+          "label": "t:heading.label",
+          "default": "Stay up to date"
+        },
+        {
+          "type": "richtext",
+          "id": "form_description",
+          "label": "t:description_text.label",
+          "default": "<p>Sign up to receive our once-weekly newsletter for auction updates, insights from our specialists, market trends, and event information.</p>"
+        },
+        {
+          "type": "select",
+          "id": "form_description_size",
+          "label": "t:sizes.description_text.label",
+          "options": [
+            {
+              "value": "text-size--small",
+              "label": "t:sizes.text.options.opt_1.label"
+            },
+            {
+              "value": "text-size--medium",
+              "label": "t:sizes.text.options.opt_2.label"
+            },
+            {
+              "value": "text-size--large",
+              "label": "t:sizes.text.options.opt_3.label"
+            }
+          ],
+          "default": "text-size--small"
+        },
+        {
+          "type": "select",
+          "id": "form_description_weight",
+          "label": "t:weight.description_text.label",
+          "options": [
+            {
+              "value": "--fw-bold",
+              "label": "t:weight.heading.options.opt_1.label"
+            },
+            {
+              "value": "--fw-semi-bold",
+              "label": "t:weight.heading.options.opt_5.label"
+            },
+            {
+              "value": "--fw-medium",
+              "label": "t:weight.heading.options.opt_2.label"
+            },
+            {
+              "value": "--fw-normal",
+              "label": "t:weight.heading.options.opt_3.label"
+            },
+            {
+              "value": "--fw-light",
+              "label": "t:weight.heading.options.opt_4.label"
+            }
+          ],
+          "default": "--fw-light"
+        },
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "label": "t:settings_schema.buttons.settings.button.label",
+          "default": "Susbcribe"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.footer_top.blocks.menu.name",
+      "type": "menu",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "menu_heading",
+          "label": "t:heading.label",
+          "default": "Contact Us"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.footer_top.blocks.menu.label",
+          "info": "t:sections.footer_top.blocks.menu.info",
+          "default": "footer"
+        }
+      ]
+    },
+    {
+      "name": "t:sections.footer.blocks.payment_methods.name",
+      "type": "method",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "payment_heading",
+          "label": "t:heading.label",
+          "default": "Payment Method"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_payment_icons",
+          "label": "t:sections.footer.blocks.pay_icons.label",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "follow_on_shops",
+          "label": "t:sections.footer.blocks.follow_on_shop.label",
+          "info": "t:sections.footer.blocks.follow_on_shop.info",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_links",
+          "label": "t:sections.footer.blocks.show_social_list.label",
+          "info": "t:sections.footer.blocks.show_social_list.info",
+          "default": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

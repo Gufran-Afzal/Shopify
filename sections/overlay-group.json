@@ -1,0 +1,60 @@
+{
+  "type": "custom.overlay",
+  "name": "Overlay group",
+  "sections": {
+    "store_locations": {
+      "type": "store-locator-popup",
+      "settings": {},
+      "blocks": {
+        "store_1": {
+          "type": "store",
+          "settings": {
+            "open_by_default": true
+          }
+        },
+        "store_2": {
+          "type": "store",
+          "settings": {
+          }
+        },
+        "store_3": {
+          "type": "store",
+          "settings": {
+          }
+        }
+      },
+      "block_order": [
+        "store_1",
+        "store_2",
+        "store_3"
+      ]
+    },
+    "age-verification-popup": {
+      "type": "age-verification-popup",
+      "disabled": true,
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Age Verification"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "heading": "<p>You must be 18 years old to access this website. Please verify your age.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "store_locations",
+    "age-verification-popup"
+  ]
+}

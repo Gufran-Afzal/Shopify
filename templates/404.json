@@ -1,0 +1,71 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+      }
+    },
+    "scrolling_banner": {
+      "type": "scrolling-banner",
+      "blocks": {
+        "banner_one": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": false
+          }
+        },
+        "banner_two": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": true
+          }
+        },
+        "banner_three": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": false
+          }
+        },
+        "banner_four": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": true
+          }
+        }
+      },
+      "block_order": [
+        "banner_one",
+        "banner_two",
+        "banner_three",
+        "banner_four"
+      ],
+      "settings": {
+        "block_heading_size": "text-size--large",
+        "block_heading_weight": "--fw-light",
+        "section_full_width": true,
+        "section_color_scheme": "scheme3",
+        "marquee_speed": 15,
+        "marquee_direction": "marquee_backward",
+        "marquee_on_hover": false,
+        "section_top_padding": 0,
+        "section_bottom_padding": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "scrolling_banner"
+  ]
+}

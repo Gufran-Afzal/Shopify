@@ -1,0 +1,396 @@
+ {
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "block_heading_size": "h3",
+            "block_heading_weight": "--fw-bold",
+            "block_spacing": 8
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "block_text_size": "text-size--large",
+            "block_text_weight": "--fw-normal",
+            "block_spacing": 10
+          }
+        },
+        "statistics": {
+          "type": "statistics",
+          "settings": {
+            "show_sku": true,
+            "show_stock": true,
+            "show_vendor": true,
+            "block_text_weight": "--fw-light",
+            "block_spacing": 16
+          }
+        },
+        "variants_chart": {
+          "type": "variants_chart",
+          "settings": {
+            "variant_style": "dropdown",
+            "show_size_chart": true,
+            "block_spacing": 22
+          }
+        },
+        "quantity_input": {
+          "type": "quantity_input",
+          "settings": {
+            "show_subtotal": true,
+            "block_spacing": 45
+          }
+        },
+        "stock_bar": {
+          "type": "stock_bar",
+          "settings": {
+            "block_text_size": "text-size--small",
+            "block_text_weight": "--fw-normal",
+            "block_spacing": 18
+          }
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {
+            "show_dynamic_checkouts": true,
+            "show_gift_card_recipient": false,
+            "show_whatsapp": false,
+            "whatsapp_number": "",
+            "custom_message": "Hi! I'm interested in learning more about the ||product_url||. Could you please provide more details or assist me with the purchase? Looking forward to your response! Thank you!",
+            "block_spacing": 25
+          }
+        },
+        "payment_icons": {
+          "type": "payment_icons",
+          "settings": {
+            "heading": "Guaranteed safe checkout",
+            "block_spacing": 25
+          }
+        },
+        "action_buttons": {
+          "type": "action_buttons",
+          "settings": {
+            "enable_question": true,
+            "enable_share": true,
+            "block_spacing": 0
+          }
+        },
+        "collapsible_row": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Free Shipping & Return",
+            "block_heading_size": "text-size--small",
+            "block_heading_weight": "--fw-semi-bold",
+            "block_description": "<p>Discover our reliable shipping options and delivery times. We ensure your orders are delivered safely and promptly, right to your doorstep.</p>",
+            "block_description_size": "text-size--small",
+            "block_description_weight": "--fw-light",
+            "open_by_default": true,
+            "block_spacing": 34
+          }
+        },
+        "content": {
+          "type": "content",
+          "settings": {
+            "block_text_size": "text-size--small",
+            "block_text_weight": "--fw-light",
+            "block_spacing": 19
+          }
+        },
+        "pickup_availability": {
+          "type": "pickup_availability",
+          "settings": {
+            "block_text_size": "text-size--small",
+            "block_text_weight": "--fw-light",
+            "block_spacing": 19
+          }
+        },
+        "collapsible_row_2": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Notice",
+            "block_heading_size": "text-size--small",
+            "block_heading_weight": "--fw-semi-bold",
+            "block_description": "<p>Our hassle-free return policy guarantees your satisfaction. If you're not completely satisfied with your purchase, we make it easy to return or exchange items within 30 days.</p>",
+            "block_description_size": "text-size--small",
+            "block_description_weight": "--fw-light",
+            "open_by_default": true,
+            "block_spacing": 34
+          }
+        },
+        "complementary": {
+          "type": "complementary",
+          "settings": {
+            "heading": "Frequently bought together",
+            "block_heading_size": "text-size--medium",
+            "block_heading_weight": "--fw-medium",
+            "show_navigation": true,
+            "block_spacing": 19
+          }
+        },
+        "quote_1": {
+          "type": "review",
+          "settings": {
+            "heading": "Alex J.",
+            "block_heading_size": "text-size--small",
+            "block_heading_weight": "--fw-normal",
+            "block_description": "Excellent quality and fast shipping. Would definitely buy again.",
+            "block_description_size": "text-size--large",
+            "block_description_weight": "--fw-light",
+            "block_rating": "5",
+            "block_color_scheme": "",
+            "block_spacing": 0
+          }
+        },
+        "quote_2": {
+          "type": "review",
+          "settings": {
+            "heading": "Jamie L.",
+            "block_heading_size": "text-size--small",
+            "block_heading_weight": "--fw-normal",
+            "block_description": "Excellent quality and fast shipping. Would definitely buy again.",
+            "block_description_size": "text-size--large",
+            "block_description_weight": "--fw-light",
+            "block_rating": "5",
+            "block_color_scheme": "scheme1",
+            "block_spacing": 0
+          }
+        },
+        "quote_3": {
+          "type": "review",
+          "settings": {
+            "heading": "Samuel K.",
+            "block_heading_size": "text-size--small",
+            "block_heading_weight": "--fw-normal",
+            "block_description": "Excellent quality and fast shipping. Would definitely buy again.",
+            "block_description_size": "text-size--large",
+            "block_description_weight": "--fw-light",
+            "block_rating": "5",
+            "block_color_scheme": "",
+            "block_spacing": 0
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "statistics",
+        "variants_chart",
+        "quantity_input",
+        "stock_bar",
+        "buttons",
+        "payment_icons",
+        "action_buttons",
+        "collapsible_row",
+        "content",
+        "pickup_availability",
+        "collapsible_row_2",
+        "complementary",
+        "quote_1",
+        "quote_2",
+        "quote_3"
+      ],
+      "settings": {
+        "product_media_size": "adapt",
+        "product_gallery_view": "slider_thumbnails",
+        "section_color_scheme": "",
+        "section_auto_play": false,
+        "section_show_navigation": true,
+        "section_change_slides_every": 5,
+        "section_top_padding": 50,
+        "section_bottom_padding": 50,
+        "reviews_position": "vertical",
+        "reviews_auto_play": false,
+        "reviews_show_navigation": true,
+        "reviews_show_pagination": false,
+        "reviews_change_slides_every": 5
+      }
+    },
+    "scrolling_banner": {
+      "type": "scrolling-banner",
+      "blocks": {
+        "banner_one": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": false
+          }
+        },
+        "banner_two": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": false
+          }
+        },
+        "banner_three": {
+          "type": "banner",
+          "settings": {
+            "heading": "Your scrolling text here",
+            "link_url": "",
+            "open_new_window": false,
+            "stencil_text": false
+          }
+        }
+      },
+      "block_order": [
+        "banner_one",
+        "banner_two",
+        "banner_three"
+      ],
+      "settings": {
+        "block_heading_size": "text-size--large",
+        "block_heading_weight": "--fw-light",
+        "section_full_width": false,
+        "section_color_scheme": "scheme3",
+        "marquee_speed": 15,
+        "marquee_direction": "marquee_backward",
+        "marquee_on_hover": false,
+        "section_top_padding": 0,
+        "section_bottom_padding": 0
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendation",
+      "settings": {
+        "section_caption": "ART ADVISORY SERVICE",
+        "section_caption_size": "text-size--small",
+        "section_caption_weight": "--fw-medium",
+        "section_heading": "You May Also Like",
+        "section_heading_size": "h3",
+        "section_heading_weight": "--fw-bold",
+        "max_header_size": 100,
+        "auto_play": false,
+        "show_navigation": false,
+        "show_pagination": true,
+        "change_slides_every": 5,
+        "number_of_columns_on_desktop": 4,
+        "products_to_show": 12,
+        "product_media_size": "adapt",
+        "product_heading_size": "text-size--small",
+        "product_heading_weight": "--fw-normal",
+        "btns_position": "top",
+        "enable_atc": true,
+        "enable_quick_view": true,
+        "show_swatches": true,
+        "show_price": true,
+        "show_vendor": true,
+        "show_stock_tag": true,
+        "thumbnail_layout": "slider",
+        "section_text_alignment": "center",
+        "section_mobile_text_alignment": "center",
+        "section_color_scheme": "",
+        "section_top_padding": 50,
+        "section_bottom_padding": 50
+      }
+    },
+    "email_signup": {
+      "type": "email-signup",
+      "blocks": {
+        "icon_one": {
+          "type": "icon",
+          "settings": {
+            "heading": "Free delivery",
+            "description": "<p>Get free shipping over $65.</p>",
+            "block_spacing": 25
+          }
+        },
+        "icon_two": {
+          "type": "icon",
+          "settings": {
+            "heading": "Deliver From Canada",
+            "description": "<p>Get free shipping over $65.</p>",
+            "block_spacing": 25
+          }
+        },
+        "icon_three": {
+          "type": "icon",
+          "settings": {
+            "heading": "Trusted by Professionals",
+            "description": "<p>Within 30 days for an exchange.</p>",
+            "block_spacing": 50
+          }
+        }
+      },
+      "block_order": [
+        "icon_one",
+        "icon_two",
+        "icon_three"
+      ],
+      "settings": {
+        "show_image": true,
+        "heading": "Newsletter",
+        "section_heading_size": "h6",
+        "section_heading_weight": "--fw-semi-bold",
+        "block_heading_size": "h6",
+        "block_heading_weight": "--fw-semi-bold",
+        "block_description_size": "text-size--small",
+        "block_description_weight": "--fw-light",
+        "section_full_width": false,
+        "content_alignment": "middle",
+        "section_color_scheme": "",
+        "section_top_padding": 50,
+        "section_bottom_padding": 50
+      }
+    },
+    "image_gallery": {
+      "type": "image-gallery",
+      "blocks": {
+        "image_one": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_two": {
+          "type": "image",
+          "settings": {}
+        },
+        "image_three": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "image_one",
+        "image_two",
+        "image_three"
+      ],
+      "settings": {
+        "section_heading": "",
+        "section_heading_size": "h3",
+        "section_heading_weight": "--fw-bold",
+        "section_description": "",
+        "description_text_size": "text-size--large",
+        "section_description_weight": "--fw-normal",
+        "max_header_size": 100,
+        "caption_content_alignment": "mcenter",
+        "caption": "Follow on Instagram",
+        "button_label": "@HANDY ON INSTAGRAM",
+        "type": "secondary",
+        "url": "",
+        "open_new_window": true,
+        "section_full_width": true,
+        "remove_grid_spacing": true,
+        "section_text_alignment": "center",
+        "section_color_scheme": "",
+        "marquee_speed": 15,
+        "marquee_direction": "marquee_backward",
+        "marquee_on_hover": false,
+        "section_top_padding": 60,
+        "section_bottom_padding": 60
+      }
+    }
+  },
+  "order": [
+    "main",
+    "scrolling_banner",
+    "recommendations",
+    "email_signup",
+    "image_gallery"
+  ]
+}

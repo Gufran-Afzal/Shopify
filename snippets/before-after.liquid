@@ -1,0 +1,86 @@
+{%- comment -%}
+  renders before/after on section templates
+  usage
+    {%- render 'before-after', height: bf_height, loading_attr: loading_attr -%}
+{%- endcomment -%}
+{%- liquid
+  assign image_width = settings.page_width | times: 3
+  assign image_height = image_width | divided_by: 2
+-%}
+<div class="bf-outer-wrap">
+  <before-after class="bf-wrapper {{ height }}" style="--after-placement: {{ section.settings.after_position }}%;">
+    {%- if section.blocks.size > 1 -%}
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'before' -%}
+            <div class="bf-wrapper_image bf-wrapper_image--before {{ height }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {%- liquid
+                  capture image_alt
+                    unless block.settings.image.alt == blank
+                      echo block.settings.image.alt
+                      else
+                        echo 'before_after.image_alt' | t: index: forloop.index
+                    endunless
+                  endcapture
+
+                  assign image_height_attr = 786 | divided_by: block.settings.image.aspect_ratio | round
+                -%}
+                {{- block.settings.image | image_url: width: image_width, height: image_height | image_tag:
+                  class: 'object-fit object-fit--absolute',
+                  width: 786,
+                  height: image_height_attr,
+                  alt: image_alt,
+                  loading: loading_attr,
+                  widths: '238, 302, 330, 410, 524, 685, 786',
+                  sizes: '(max-width: 767px) calc(100vw - 82px), (max-width: 1259px) calc((100vw * 48 / 100) - 67px), calc((var(--cp-width-px) * 48 / 100) - 67px)'
+                -}}
+                {%- else -%}
+                  {{- 'hero-apparel-1' | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+      {%- for block in section.blocks -%}
+        {%- assign image_alt = 'before_after.image_alt' | t: index: forloop.index -%}
+        {%- case block.type -%}
+          {%- when 'after' -%}
+            <div class="bf-wrapper_image bf-wrapper_image--after {{ height }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                {%- liquid
+                  capture image_alt
+                    unless block.settings.image.alt == blank
+                      echo block.settings.image.alt
+                      else
+                        echo 'before_after.image_alt' | t: index: forloop.index
+                    endunless
+                  endcapture
+
+                  assign image_height_attr = 786 | divided_by: block.settings.image.aspect_ratio | round
+                -%}
+                {{- block.settings.image | image_url: width: image_width, height: image_height | image_tag:
+                  class: 'object-fit object-fit--absolute',
+                  width: 786,
+                  height: image_height_attr,
+                  alt: image_alt,
+                  loading: loading_attr,
+                  widths: '238, 302, 330, 410, 524, 685, 786',
+                  sizes: '(max-width: 767px) calc(100vw - 82px), (max-width: 1259px) calc((100vw * 48 / 100) - 67px), calc((var(--cp-width-px) * 48 / 100) - 67px)'
+                -}}
+                {%- else -%}
+                  {{- 'hero-apparel-2' | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+      <div class="bf-wrapper_pointer --v-align-middle --justify-center {{ height }}">
+        <span class="bf-wrapper_point"></span>
+        <input type="range" title="{{- section.settings.section_heading | strip_html | escape -}}" value="{{- section.settings.after_position -}}">
+      </div>
+      {%- else -%}
+        <div class="bf-wrapper_error-text mty text-size--small --align-center">
+          <p>{{- 'before_after.error_text' | t -}}</p>
+        </div>
+    {%- endif -%}
+  </before-after>
+</div>

@@ -1,0 +1,368 @@
+{%- style -%}
+  accordion-wrapper.store-collapsible_row{
+    display: block;
+  }
+
+  .store-collapsible_row,
+  .modal-component--store-locator .modal-component_head{
+    border-bottom: 1px solid var(--section-border-color);
+  }
+
+  .store-collapsible_row:last-child{
+    border-bottom: none;
+  }
+
+  .store-collapsible_opener{
+    --headings-font-weight: 500;
+    line-height: 2.8rem;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .store-collapsible_description-wrap,
+  .modal-component--store-locator .modal-component_body,
+  .store-collapsible_opener{
+    padding: 0;
+  }
+
+  .store-collapsible_row .open-close[open] .open-close_opener--icn-open{
+    display: none;
+  }
+
+  .store-collapsible_row .open-close_opener-icn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    line-height: 0;
+  }
+
+  .store-collapsible_row .open-close_opener--icn-open svg,
+  .store-collapsible_row .open-close_opener--icn-close svg{
+    padding: 7px;
+  }
+
+  .store-collapsible{
+    padding: 15px;
+  }
+
+  .modal-component--store-locator .modal-component_head{
+    padding: 32px 20px 21px 15px;
+  }
+
+  .store-collapsible_logo{
+    margin-bottom: 5px;
+  }
+
+  .store-collapsible_btn{
+    --button-padding-x: 2.4rem;
+    --button-padding-y: 0.6rem;
+  }
+
+  .store-collapsible_description p{
+    margin: 0;
+  }
+
+  .store-collapsible_description{
+    margin-top: 9px;
+    margin-bottom: 22px;
+  }
+
+  .store-collapsible_map-wrap svg{
+    width: 100%;
+    height: 100%;
+    margin-top: 10px;
+  }
+
+  .store-collapsible_map-wrap iframe{
+    margin: 0;
+  }
+
+  .store-collapsible_map-wrap iframe + svg,
+  .--desktop-store-img {
+    display: none;
+  }
+
+  .store-collapsible_map-wrap{
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    line-height: 0;
+  }
+
+  .modal-component--store-locator .modal-component_btn-close{
+    z-index: 9999;
+  }
+
+  @media(min-width: 576px){
+    .store-collapsible_map-wrap iframe{
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      left: 0;
+    }
+
+    .store-collapsible_map-wrap iframe + svg {
+      display: block;
+    }
+
+    .store-collapsible_map-wrap svg{
+      margin-top: 0;
+    }
+
+    .store-collapsible_map-wrap iframe,
+    .store-collapsible_map-wrap{
+      top: 0;
+      position: absolute;
+    }
+
+    .modal-component--store-locator .modal-component_head,
+    .modal-component--store-locator .modal-component_content{
+      width: 38%;
+    }
+    
+    .store-collapsible_map-wrap{
+      left: 38%;
+      bottom: 0;
+      right: 0;
+      margin-top: 0;
+    }
+
+    .store-collapsible_map-wrap{
+      z-index: 999;
+    }
+
+    .modal-component--store-locator .modal-component_body{
+      position: relative;
+      overflow: hidden;
+      max-width: 940px;
+      overflow: auto;
+    }
+  }
+
+  @media (min-width: 768px){
+    .--mobile-store-img{
+      display: none;
+    }
+
+    .--desktop-store-img{
+      display: block;
+    }
+  }
+
+  @media (min-width: 992px){
+    .store-collapsible{
+      padding: 35px 35px 45px 41px;
+    }
+
+    .modal-component--store-locator .modal-component_head{
+      padding: 32px 20px 21px 41px;
+    }
+  }
+{%- endstyle -%}
+{%- render 'store-locator-modal', section_id: section.id -%}
+{% schema %}
+{
+  "name": "t:sections.store_locator.name",
+  "limit": 1,
+  "enabled_on": {
+    "groups": [
+      "custom.overlay"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:site_logo.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:image.label",
+      "info": "t:site_logo.info"
+    },
+    {
+      "type": "range",
+      "id": "logo_desktop_width",
+      "label": "t:image.width.desktop.label",
+      "min": 100,
+      "max": 200,
+      "step": 1,
+      "default": 133,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "logo_mobile_width",
+      "label": "t:image.width.mobile.label",
+      "min": 90,
+      "max": 150,
+      "step": 1,
+      "default": 133,
+      "unit": "px"
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "t:heading.label",
+      "default": "Store locations"
+    },
+    {
+      "type": "color_scheme",
+      "id": "store_locator_color_scheme",
+      "default": "scheme2",
+      "label": "t:color_scheme.label"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "t:sections.store_locator.blocks.store.name",
+      "type": "store",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:heading.label",
+          "default": "Store heading"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "t:sizes.heading.label",
+          "options": [
+            {
+              "value": "heading_small",
+              "label": "t:sizes.heading.options.opt_5.label"
+            },
+            {
+              "value": "heading_x_small",
+              "label": "t:sizes.heading.options.opt_6.label"
+            }
+          ],
+          "default": "heading_x_small"
+        },
+        {
+          "type": "select",
+          "id": "heading_weight",
+          "label": "t:weight.heading.label",
+          "options": [
+            {
+              "value": "bold",
+              "label": "t:weight.heading.options.opt_1.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:weight.heading.options.opt_2.label"
+            },
+            {
+              "value": "normal",
+              "label": "t:weight.heading.options.opt_3.label"
+            }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "richtext",
+          "id": "description_text",
+          "label": "t:description_text.label",
+          "default": "<p>Store description</p>"
+        },
+        {
+          "type": "select",
+          "id": "description_text_size",
+          "label": "t:sizes.description_text.label",
+          "options": [
+            {
+              "value": "small",
+              "label": "t:sizes.text.options.opt_1.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:sizes.text.options.opt_2.label"
+            },
+            {
+              "value": "large",
+              "label": "t:sizes.text.options.opt_3.label"
+            },
+            {
+              "value": "xlarge",
+              "label": "t:sizes.text.options.opt_4.label"
+            }
+          ],
+          "default": "small"
+        },
+        {
+          "type": "select",
+          "id": "description_weight",
+          "label": "t:weight.description_text.label",
+          "options": [
+            {
+              "value": "bold",
+              "label": "t:weight.heading.options.opt_1.label"
+            },
+            {
+              "value": "semi_bold",
+              "label": "t:weight.heading.options.opt_5.label"
+            },
+            {
+              "value": "medium",
+              "label": "t:weight.heading.options.opt_2.label"
+            },
+            {
+              "value": "normal",
+              "label": "t:weight.heading.options.opt_3.label"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "textarea",
+          "id": "map_iframe",
+          "label": "t:sections.store_locator.blocks.store.settings.map.label",
+          "info": "t:sections.store_locator.blocks.store.settings.map.info"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:settings_schema.buttons.settings.button.label",
+          "default": "Get Directions"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "t:settings_schema.buttons.settings.button.link.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_window",
+          "label": "t:target_blank.label",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.store_locator.name",
+      "blocks": [
+        {
+          "type": "store",
+          "settings": {
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+          }
+        },
+        {
+          "type": "store",
+          "settings": {
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

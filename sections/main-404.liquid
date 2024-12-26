@@ -1,0 +1,528 @@
+{%- liquid
+  assign section_prefix_class = 'main-404'
+  assign section_scheme_class = section.settings.section_color_scheme | prepend: 'scheme scheme--'
+
+	capture loading_attr
+		if section.index > 1
+			echo 'lazy'
+			else
+				echo 'eager'
+		endif
+	endcapture
+
+	capture heading_alt
+		echo 'main_404.label' | t
+	endcapture
+
+	capture img_blank
+		if section.settings.image == blank
+			echo '--image-none'
+		endif
+	endcapture
+
+	capture btn_url
+		echo section.settings.section_link | default: routes.root_url
+	endcapture
+
+	capture btn_label
+		if section.settings.section_link_label != blank
+			echo section.settings.section_link_label | escape
+			else
+				echo 'main_404.button_label' | t
+		endif
+	endcapture
+-%}
+{%- style -%}
+  .main-404,
+  .main-404_img,
+  .main-404_form-align{
+    position: relative;
+  }
+
+  .main-404 .container-fluid{
+    --cp-spacer-left: 0;
+    --cp-spacer-right: 0;
+  }
+
+  .main-404_empty-icn,
+  .main-404_caption-one::after,
+  .main-404_btn-label{
+    display: block;
+  }
+
+  .main-404_btn svg{
+    flex-shrink: 0;
+  }
+
+  .main-404_empty-icn{
+    margin-bottom: 43px;
+  }
+
+  .main-404_empty-icn svg{
+    color: var(--section-heading-color);
+  }
+
+  .main-404_description,
+  .main-404_caption-one,
+  .main-404_caption-two{
+    margin-top: 16px;
+  }
+
+  .main-404_btn,
+  .main-404_wrapper{
+    display: flex;
+  }
+
+  .main-404_btn{
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    --button-padding-y: 1.7rem;
+    --button-text-alignment: left;
+  }
+
+  .main-404_wrapper{
+    justify-content: center;
+  }
+
+  .main-404_column{
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 50%;
+  }
+
+  .main-404_column--image{
+    display: none;
+  }
+
+  .main-404_img{
+    height: 100%;
+  }
+
+  .main-404_btn,
+  .main-404_img{
+    width: 100%;
+  }
+
+  .main-404_form-align{
+    padding: 70px 15px 44px 15px;
+    max-width: 491px;
+  }
+
+  .main-404_caption-one::after {
+    content: '';
+    height: 182px;
+    border-left: 1px solid var(--section-border-color);
+    margin-top: 28px;
+  }
+
+  .--image-none .main-404_form-align{
+    max-width: 100%;
+  }
+
+  .main-404_column.align-holder{
+    flex-direction: column;
+  }
+
+  .main-404_foot:focus-within {
+    padding: 4px;
+  }
+
+  .align-holder--mcenter .main-404_form-align.align-holder_wrapper{
+    margin: 0;
+  }
+
+  @media(min-width: 768px){
+    .main-404_column--image{
+      display: block;
+    }
+
+    .main-404_form-align{
+      padding-top: 170px;
+      padding-left: 30px;
+      padding-right: 40px;
+    }
+  }
+
+  @media(min-width: 1200px){
+    .main-404_form-align{
+      padding-left: 108px;
+    }
+
+    .main-404_btn{
+      --button-padding-x: 9.9rem;
+    }
+  }
+{%- endstyle -%}
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden">
+  <symbol id="icn-404-icon-{{ section.id }}">
+    <g clip-path="url(#clip0_886_4558)">
+      <path d="M92.4159 75.5281C92.4159 79.2926 92.4243 83.0613 92.4116 86.8258C92.4032 88.8273 91.857 89.6322 90.0111 90.2795C77.8007 94.5422 65.5903 98.8092 53.3587 103.008C52.5374 103.289 51.4493 103.268 50.6194 102.983C38.3879 98.7879 26.1775 94.5252 13.9629 90.2709C12.155 89.6407 11.5834 88.8188 11.5792 86.8045C11.5707 79.2713 11.5538 71.738 11.6004 64.209C11.6088 63.1742 11.3252 62.6802 10.326 62.3736C7.69678 61.573 5.10143 60.6745 2.49762 59.7972C-0.144291 58.9029 -0.762431 56.812 0.964975 54.6317C4.56374 50.0921 8.1498 45.5398 11.8121 41.0514C12.4006 40.3274 13.3024 39.7142 14.183 39.4033C26.2495 35.1448 38.3328 30.9247 50.4374 26.7727C51.3773 26.449 52.6178 26.4362 53.5535 26.7599C65.6199 30.8906 77.6609 35.0895 89.6851 39.3437C90.6461 39.6844 91.6157 40.3743 92.2635 41.1621C95.8792 45.5739 99.3975 50.0623 102.941 54.5295C104.749 56.812 104.186 58.8561 101.472 59.7972C99.0037 60.6532 96.5396 61.5432 94.029 62.2629C92.78 62.6206 92.3312 63.1529 92.3735 64.4986C92.4878 68.1779 92.4159 71.853 92.4159 75.5281ZM86.6621 64.7967C86.2556 64.9244 85.8704 65.0437 85.4851 65.1714C78.2579 67.586 71.035 70.0048 63.8078 72.4151C61.475 73.1944 60.6663 72.9134 59.231 70.865C58.0625 69.1957 56.9067 67.5178 55.7339 65.8528C55.5518 65.593 55.3105 65.3716 55.0014 65.0266C55.0014 75.5408 55.0014 85.8549 55.0014 96.2711C55.6704 96.0625 56.2335 95.9092 56.7797 95.7175C66.2296 92.4257 75.671 89.1084 85.1337 85.8634C86.2937 85.4674 86.7087 84.9819 86.6917 83.7001C86.6198 77.4359 86.6621 71.1801 86.6621 64.7967ZM48.9725 96.2967C48.9725 85.8293 48.9725 75.5025 48.9725 64.8393C47.4102 67.075 46.0511 69.0381 44.6794 70.9885C43.3584 72.875 42.4651 73.1774 40.3058 72.4534C33.0871 70.0431 25.8726 67.6286 18.6539 65.214C18.2517 65.0777 17.8411 64.9713 17.3372 64.8222C17.3372 71.5123 17.3203 78.0406 17.3838 84.5688C17.388 84.9393 17.9892 85.4844 18.4211 85.6377C24.7888 87.8947 31.1776 90.0963 37.558 92.315C41.3346 93.6309 45.1112 94.951 48.9725 96.2967ZM80.6035 42.3757C80.1589 42.1756 79.9684 42.0691 79.7609 41.9967C70.7429 38.8582 61.7248 35.7155 52.694 32.611C52.2029 32.4407 51.5424 32.5259 51.0343 32.7005C45.9199 34.4507 40.8223 36.2435 35.7163 38.0236C31.6942 39.4246 27.672 40.8214 23.4467 42.2906C23.9462 42.5078 24.2257 42.6483 24.5136 42.7462C33.4046 45.8464 42.2872 48.9551 51.1952 52.0084C51.7668 52.2043 52.5331 52.1277 53.1216 51.9275C60.1075 49.53 67.0806 47.0856 74.0537 44.6583C76.1706 43.9216 78.2833 43.1849 80.6035 42.3757ZM7.74335 55.4237C10.4572 56.3308 13.0145 57.1868 15.5717 58.0427C23.6033 60.7341 31.6349 63.434 39.675 66.0955C40.0941 66.236 40.8774 66.236 41.0594 65.9848C43.2017 63.0294 45.2636 60.0101 47.3467 57.0079C47.1858 56.8929 47.1223 56.8205 47.0418 56.7907C36.7494 53.188 26.4569 49.5896 16.156 46.0168C15.8554 45.9103 15.2838 45.9955 15.106 46.2126C12.6588 49.2234 10.2498 52.2725 7.74335 55.4237ZM96.2475 55.411C93.8681 52.4173 91.5691 49.5726 89.3379 46.6683C88.7578 45.9145 88.2752 45.8507 87.4157 46.153C80.4087 48.6357 73.3805 51.0631 66.3566 53.5074C63.1304 54.6274 59.9 55.7431 56.5637 56.9014C58.5579 59.7717 60.5097 62.4886 62.3599 65.2779C62.9822 66.219 63.5115 66.4532 64.6377 66.07C72.9529 63.221 81.2936 60.4615 89.6258 57.668C91.7893 56.9398 93.9485 56.1945 96.2475 55.411Z" fill="currentColor"/>
+      <path d="M55.9425 11.7063C58.2118 13.9804 60.3457 16.0031 62.3271 18.1665C62.941 18.8393 63.394 19.8656 63.4745 20.7727C63.5803 21.9224 62.8055 22.8338 61.6878 23.2341C60.5362 23.6471 59.465 23.4214 58.5759 22.5314C56.7257 20.6747 54.8756 18.8138 53.0211 16.9571C52.7078 16.6419 52.3776 16.3481 51.8992 15.9009C49.7145 18.1409 47.5764 20.3425 45.4299 22.5314C44.5492 23.4299 43.3722 23.7962 42.3476 23.1915C41.5559 22.723 40.6964 21.7393 40.5906 20.8919C40.4805 20.0359 41.0478 18.8734 41.6787 18.1792C43.6474 16.0074 45.7855 13.9889 47.9321 11.8384C45.7559 9.64949 43.5924 7.5969 41.594 5.39526C40.9928 4.73094 40.5948 3.67057 40.544 2.76352C40.4847 1.60521 41.3103 0.774804 42.4365 0.383023C43.5839 -0.0172742 44.5873 0.302112 45.4172 1.11974C47.2885 2.95941 49.126 4.83314 50.9762 6.68558C51.2895 7.00071 51.6197 7.29455 52.0516 7.70336C53.8721 5.86369 55.6419 4.06661 57.4116 2.27379C57.7927 1.88627 58.161 1.48597 58.5632 1.124C59.8842 -0.068376 61.5396 -0.0811515 62.6912 1.0729C63.8344 2.22269 63.8555 3.93034 62.6277 5.21641C60.8156 7.11143 58.9485 8.95536 57.0899 10.8078C56.7808 11.1229 56.3913 11.3614 55.9425 11.7063Z" fill="currentColor"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_886_4558">
+        <rect width="104" height="103" fill="currentColor" transform="translate(0 0.212891)"/>
+      </clipPath>
+    </defs>
+  </symbol>
+  <symbol id="icn-btn-arrow-{{ section.id }}">
+    <path d="M33.3536 4.56644C33.5488 4.37118 33.5488 4.0546 33.3536 3.85934L30.1716 0.677357C29.9763 0.482095 29.6597 0.482095 29.4645 0.677357C29.2692 0.872619 29.2692 1.1892 29.4645 1.38446L32.2929 4.21289L29.4645 7.04132C29.2692 7.23658 29.2692 7.55316 29.4645 7.74842C29.6597 7.94369 29.9763 7.94369 30.1716 7.74842L33.3536 4.56644ZM0 4.71289H33V3.71289H0V4.71289Z" fill="currentColor"/>
+  </symbol>
+</svg>
+<div class="global-block {{ section_prefix_class }} {{ section_prefix_class }}-{{ section.id }} {{ section_scheme_class }}" style="--section-padding-top: {{ section.settings.section_top_padding }}px; --section-padding-bottom: {{ section.settings.section_bottom_padding }}px;">
+  <div class="container-fluid">
+    <div class="{{ section_prefix_class }}_wrapper">
+      {%- if section.settings.image != blank -%}
+        <div class="{{ section_prefix_class }}_column {{ section_prefix_class }}_column--image">
+          <div class="{{ section_prefix_class }}_img">
+            {{- section.settings.image | image_url: width: 1944 | image_tag: class: 'object-fit object-fit--absolute', loading: loading_attr, alt: heading_alt, widths: '972, 1944', sizes: '(max-width: 767px) 972vw, 1944vw' -}}
+          </div>
+        </div>
+				{%- else -%}
+					<div class="{{ section_prefix_class }}_column {{ section_prefix_class }}_column--image">
+						<div class="{{ section_prefix_class }}_img">
+							{{- 'hero-apparel-1' | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+						</div>
+					</div>
+      {%- endif -%}
+      <div class="{{ section_prefix_class }}_column align-holder {{ img_blank }} align-holder--mcenter">
+        <div class="{{ section_prefix_class }}_form-align align-holder_wrapper">
+					<span class="{{ section_prefix_class }}_empty-icn">
+						{%- render 'icons-data', width: 104, height: 103, use_icon: true, icon_reference: '404-icon', section_id: section.id -%}
+					</span>
+					{%- if section.settings.heading != blank -%}
+						<h1 class="{{ section_prefix_class }}_heading {{ section.settings.section_heading_size }} {{ section.settings.section_heading_weight }} --word-break mty">
+							{{ section.settings.heading }}
+						</h1>
+					{%- endif -%}
+					{%- if section.settings.section_description != blank -%}
+						<div class="{{ section_prefix_class }}_description {{ section.settings.section_description_size }} {{ section.settings.section_description_weight }} --word-break mty">
+							{{ section.settings.section_description }}
+						</div>
+					{%- endif -%}
+					{%- if section.settings.caption_one != blank -%}
+						<div class="{{ section_prefix_class }}_caption-one {{ section.settings.caption_one_size }} {{ section.settings.caption_one_weight }} --word-break">
+							{{ section.settings.caption_one }}
+						</div>
+					{%- endif -%}
+					{%- if section.settings.caption_two != blank -%}
+						<div class="{{ section_prefix_class }}_caption-two {{ section.settings.caption_two_size }} {{ section.settings.caption_two_weight }} --word-break">
+							{{ section.settings.caption_two }}
+						</div>
+					{%- endif -%}
+        </div>
+				<footer class="{{ section_prefix_class }}_foot --justify-self mty">
+					<a
+						href="{{- btn_url -}}" 
+						class="{{ section_prefix_class }}_btn button button--{{ section.settings.section_link_type }}"
+						{% if section.settings.section_link_target %}target="_blank"{% endif %}
+					>
+						<span class="{{ section_prefix_class }}_btn-label --word-break">
+							{{- btn_label -}}
+						</span>
+						{%- render 'icons-data', width: 33, height: 10, use_icon: true, icon_reference: 'btn-arrow', section_id: section.id -%}
+					</a>
+				</footer>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_404.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:image.label",
+      "info": "t:site_logo.info"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:heading.label",
+      "default": "Oops!"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_size",
+      "label": "t:sizes.heading.label",
+      "options": [
+        {
+          "value": "h1",
+          "label": "t:sizes.heading.options.opt_1.label"
+        },
+        {
+          "value": "h2",
+          "label": "t:sizes.heading.options.opt_2.label"
+        },
+        {
+          "value": "h3",
+          "label": "t:sizes.heading.options.opt_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sizes.heading.options.opt_4.label"
+        }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "select",
+      "id": "section_heading_weight",
+      "label": "t:weight.heading.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-bold"
+    },
+    {
+      "type": "richtext",
+      "id": "section_description",
+      "label": "t:description_text.label",
+      "default": "<p>Looks like we're all out of stock right now</p>"
+    },
+    {
+      "type": "select",
+      "id": "section_description_size",
+      "label": "t:sizes.description_text.label",
+      "options": [
+        {
+          "value": "h3",
+          "label": "t:sizes.heading.options.opt_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sizes.heading.options.opt_4.label"
+        },
+				{
+          "value": "h5",
+          "label": "t:sizes.heading.options.opt_5.label"
+        },
+        {
+          "value": "h6",
+          "label": "t:sizes.heading.options.opt_6.label"
+        }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "select",
+      "id": "section_description_weight",
+      "label": "t:weight.description_text.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-bold"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_404.settings.caption_one.label"
+    },
+		{
+      "type": "text",
+      "id": "caption_one",
+      "label": "t:caption.label",
+      "default": "But don’t worry, new collections are coming soon"
+    },
+		{
+      "type": "select",
+      "id": "caption_one_size",
+      "label": "t:sizes.caption.label",
+      "options": [
+        {
+          "value": "text-size--small",
+          "label": "t:sizes.text.options.opt_1.label"
+        },
+        {
+          "value": "text-size--medium",
+          "label": "t:sizes.text.options.opt_2.label"
+        },
+        {
+          "value": "text-size--large",
+          "label": "t:sizes.text.options.opt_3.label"
+        }
+      ],
+      "default": "text-size--small"
+    },
+    {
+      "type": "select",
+      "id": "caption_one_weight",
+      "label": "t:weight.caption.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-normal"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_404.settings.caption_two.label"
+    },
+		{
+      "type": "text",
+      "id": "caption_two",
+      "label": "t:caption.label",
+      "default": "—stay tuned for something awesome!"
+    },
+		{
+      "type": "select",
+      "id": "caption_two_size",
+      "label": "t:sizes.caption.label",
+      "options": [
+        {
+          "value": "text-size--small",
+          "label": "t:sizes.text.options.opt_1.label"
+        },
+        {
+          "value": "text-size--medium",
+          "label": "t:sizes.text.options.opt_2.label"
+        },
+        {
+          "value": "text-size--large",
+          "label": "t:sizes.text.options.opt_3.label"
+        }
+      ],
+      "default": "text-size--medium"
+    },
+    {
+      "type": "select",
+      "id": "caption_two_weight",
+      "label": "t:weight.caption.label",
+      "options": [
+        {
+          "value": "--fw-bold",
+          "label": "t:weight.heading.options.opt_1.label"
+        },
+        {
+          "value": "--fw-semi-bold",
+          "label": "t:weight.heading.options.opt_5.label"
+        },
+        {
+          "value": "--fw-medium",
+          "label": "t:weight.heading.options.opt_2.label"
+        },
+        {
+          "value": "--fw-normal",
+          "label": "t:weight.heading.options.opt_3.label"
+        }
+      ],
+      "default": "--fw-normal"
+    },
+    {
+      "type": "text",
+      "id": "section_link_label",
+      "label": "t:settings_schema.buttons.settings.button.label",
+      "default": "BACK TO HOMEPAGE"
+    },
+    {
+      "type": "select",
+      "id": "section_link_type",
+      "label": "t:settings_schema.buttons.settings.button.type.label",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:settings_schema.buttons.settings.button.type.opt_1.label"
+        },
+        {
+          "value": "secondary",
+          "label": "t:settings_schema.buttons.settings.button.type.opt_2.label"
+        }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "url",
+      "id": "section_link",
+      "label": "t:settings_schema.buttons.settings.button.link.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_link_target",
+      "label": "t:target_blank.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:layout.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "section_color_scheme",
+      "default": "scheme1",
+      "label": "t:color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:spacing.content"
+    },
+    {
+      "type": "range",
+      "id": "section_top_padding",
+      "label": "t:spacing.settings.top.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "section_bottom_padding",
+      "label": "t:spacing.settings.bottom.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0,
+      "unit": "px"
+    }
+  ]
+}
+{% endschema %}

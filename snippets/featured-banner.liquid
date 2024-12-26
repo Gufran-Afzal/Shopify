@@ -1,0 +1,49 @@
+{%- comment -%}
+  renders before/after on section templates
+  usage
+    {%- render 'featured-banner', block: block, index: forloop.index -%}
+{%- endcomment -%}
+{%- liquid
+  capture image_alt
+    if block.settings.image != blank
+      if block.settings.image.alt != blank
+        echo block.settings.image.alt
+        else
+          echo 'sections.featured_banner.image_alt' | t: index: forloop.index
+      endif
+    endif
+  endcapture
+
+  capture placeholder_image
+    if index > 3
+      echo 'hero-apparel-1'
+      else
+        echo 'hero-apparel-' | append: index
+    endif
+  endcapture
+-%}
+<article class="featured-banner">
+  <div class="featured-banner_image {{  banner_media_height }}">
+    {%- if block.settings.image != blank -%}
+      {{- block.settings.image | image_url: width: 708 | image_tag: width: 177, class: 'object-fit object-fit--absolute', loading: 'lazy', widths: '177, 354, 531, 708', sizes: '(max-width: 412px) 177w, (max-width: 767px) 354w, 708w', alt: image_alt -}}
+      {%- else -%}
+        {{- placeholder_image | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+    {%- endif -%}
+  </div>
+  {%- if block.settings.heading != blank or block.settings.subheading != blank -%}
+    <div class="banner-border">
+      <div class="featured-banner_wrap --align-left">
+        {%- if block.settings.heading != blank -%}
+          <h3 class="featured-banner_heading mty text-size--small {{ block.settings.heading_weight }}">
+            {{- block.settings.heading -}}
+          </h3>
+        {%- endif -%}
+        {%- if block.settings.subheading != blank -%}
+          <h4 class="featured-banner_subheading text-size--medium  mty {{ block.settings.subheading_weight }}">
+            {{- block.settings.subheading -}}
+          </h4>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</article>

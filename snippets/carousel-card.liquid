@@ -1,0 +1,245 @@
+{%- comment -%}
+  renders carousel card on section templates
+  usage
+    {%- render 'carousel-card', card: block, index: forloop.index, height: section_height_class, prefix_class -%}
+{%- endcomment -%}
+{% liquid
+  assign block_scheme_class = card.settings.block_color_scheme | prepend: 'scheme scheme--'
+  assign product = card.settings.product_card
+
+  if product.selected_or_first_available_variant.featured_media != null
+    assign media = product.selected_or_first_available_variant.featured_media
+    else
+      for media in product.media
+        assign media = media
+        break
+      endfor
+  endif
+
+  capture placeholder_image
+    if index > 3
+      echo 'hero-apparel-1'
+      else
+        echo 'hero-apparel-' | append: index
+    endif
+  endcapture
+
+  capture content_alignment
+    case card.settings.block_content_position
+      when 'top_left'
+        echo 'tleft'
+      when 'top_right'
+        echo 'tright'
+      when 'centered'
+        echo 'mcenter'
+      when 'bottom_left'
+        echo 'bleft'
+      when 'bottom_right'
+        echo 'bright'
+    endcase
+  endcapture
+
+  capture q_justify_mobile
+    case card.settings.block_mobile_text_alignment
+      when 'left'
+        echo 'flex-start'
+      when 'center'
+        echo 'center'
+      when 'right'
+        echo 'flex-end'
+    endcase
+  endcapture
+
+  capture q_justify_desktop
+    case card.settings.block_text_alignment
+      when 'left'
+        echo 'flex-start'
+      when 'center'
+        echo 'center'
+      when 'right'
+        echo 'flex-end'
+    endcase
+  endcapture
+
+  unless card.settings.enable_product_card
+    capture max_content_size
+      echo settings.page_width | times: card.settings.max_content_size | divided_by: 100
+    endcapture
+  endunless
+
+  unless card.settings.enable_product_card
+    capture enable_container
+      unless card.settings.enable_container
+        echo 'carousel-card--no-box'
+      endunless
+    endcapture
+  endunless
+%}
+{%- capture loading_attr -%}
+  {%- unless index != 1 -%}
+    loading="eager"
+    {%- else -%}
+      loading="lazy"
+  {%- endunless -%}
+{%- endcapture -%}
+<article class="carousel-card {{ prefix_class }}-{{ card.id }}-{{section.id}} --q-align" style="--mobile-q-align: {{ card.settings.block_mobile_text_alignment }}; --mobile-justify-align: {{ q_justify_mobile }}; --desktop-q-align: {{ card.settings.block_text_alignment }}; --desktop-justify-align: {{ q_justify_desktop }};">
+  <div class="container">
+    <div class="carousel-height">
+      <div class="align-holder {% if card.settings.enable_product_card %}align-holder--mcenter{% else %}align-holder--{{ content_alignment }}{% endif %}">
+        <div class="align-holder_wrapper {% if section.settings.show_navigation %}align-holder_wrapper--no-padding{% endif %}" style="--max-content: {{ max_content_size }}px;">
+          <div class="carousel-card_wrapper {% if card.settings.enable_product_card %}--width{% endif %} {% if card.settings.enable_container %}{{ block_scheme_class }}{% endif %} {{ enable_container }}">
+            {%- if card.settings.heading != blank or card.settings.description != blank -%}
+              <header class="heading-head">
+                {%- if card.settings.heading != blank -%}
+                  <h2 class="carousel-card_heading {{ card.settings.heading_size }} {{ card.settings.heading_weight }} --h-anchor-none mty">
+                    {{- card.settings.heading -}}
+                  </h2>
+                {%- endif -%}
+                {%- if card.settings.description != blank -%}
+                  <div class="carousel-card_description {{ card.settings.text_size }} {{ card.settings.description_weight }} --word-break mty">
+                    <p>{{- card.settings.description -}}</p>
+                  </div>
+                {%- endif -%}
+              </header>
+            {%- endif -%}
+            {%- if card.settings.first_button_heading != blank or card.settings.second_button_heading != blank -%}
+              <div class="carousel-card_btn mty --q-align-justify">
+                {%- if card.settings.first_button_heading != blank -%}
+                  <a
+                    {% if card.settings.first_url != blank %}href="{{ card.settings.first_url -}}" {% if card.settings.first_open_new_window %}target="_blank"{% endif %} {% else %} aria-disabled="true" {% endif %}
+                    class="button button--primary"
+                  >
+                    {{- card.settings.first_button_heading -}}
+                  </a>
+                {%- endif -%}
+                {%- if card.settings.second_button_heading != blank -%}
+                  <a
+                    {% if card.settings.second_url != blank %}href="{{ card.settings.second_url -}}" {% if card.settings.second_open_new_window %}target="_blank"{% endif %} {% else %} aria-disabled="true" {% endif %}
+                    class="button button--secondary"
+                  >
+                    {{- card.settings.second_button_heading -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            {%- if section.blocks.size > 1 -%}
+              {%- if section.settings.show_pagination -%}
+                <div class="carousel-card_pagination-bar">
+                  {%- for block in section.blocks -%}
+                    <button class="carousel-card_bar {% if forloop.index == index %}active{% endif %}" data-splide-pager="{{- forloop.index | minus: 1 -}}">
+                      <span class="visually-hidden">{{ 'carousel.button' | t: index: forloop.index }}</span>
+                    </button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              {%- if section.settings.show_navigation -%}
+                <div class="carousel-card_slide-controls">
+                  <button class="carousel-card_left button button--icn" type="button" data-splide-prev="">
+                    <span class="visually-hidden">{{- 'accessibility.slider.previous' | t -}}</span>
+                    <span class="button_icn-wrapper">{%- render 'icons-data', width: 14, height: 14, use_icon: true, icon_reference: 'left-arrow' -%}
+                    </span>
+                  </button>
+                  <button class="carousel-card_right button button--icn" type="button" data-splide-next="">
+                    <span class="visually-hidden">{{- 'accessibility.slider.next' | t -}}</span>
+                    <span class="button_icn-wrapper">{%- render 'icons-data', width: 14, height: 14, use_icon: true, icon_reference: 'right-arrow' -%}
+                    </span>
+                  </button>
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+          {%- if card.settings.enable_product_card -%}
+            <a {% if product.url != blank %}href="{{- product.url -}}"{% else %}aria-disabled="true"{% endif %} class="carousel-card_product widget--styles">
+              <div class="product-card_img --media-size-square" style="--media-ratio: 1;">
+                {%- if media != blank -%}
+                  {%- liquid
+                    capture image_alt
+                      unless media.preview_image.alt == blank
+                        echo media.preview_image.alt
+                        else
+                          echo 'index_image.alt' | t: index: index
+                      endunless
+                    endcapture
+                  -%}
+                  <img
+                    srcset="{%- if media.preview_image.width >= 256 -%}{{ media.preview_image | image_url: width: 256 }} 256w,{%- endif -%}
+                            {%- if media.preview_image.width >= 348 -%}{{ media.preview_image | image_url: width: 348 }} 348w,{%- endif -%}
+                            {%- if media.preview_image.width >= 384 -%}{{ media.preview_image | image_url: width: 384 }} 384w,{%- endif -%}
+                            {%- if media.preview_image.width >= 522 -%}{{ media.preview_image | image_url: width: 522 }} 522w,{%- endif -%}
+                             {{ media.preview_image | image_url: width: media.preview_image.width }} {{ media.preview_image.width }}w"
+                    sizes="(max-width: 1259px) calc((100vw * 40 / 100) - 24px), calc((var(--cp-width-px) * 40 / 100) - 24px)"
+                    src="{{- media.preview_image | image_url: width: 256 -}}"
+                    alt="{{- image_alt -}}"
+                    {{ loading_attr }}
+                    width= "256"
+                    height="{{- 256 | divided_by: media.preview_image.aspect_ratio | round -}}"
+                    class="object-fit object-fit--absolute"
+                  >
+                  {%- else -%}
+                    {{- 'product-apparel-1' | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+                {%- endif -%}
+                <span class="visually-hidden">
+                  {{ 'index_image.alt' | t: index: index }}
+                </span>
+              </div>
+              {%- if product.title != blank -%}
+                <div class="product-card_title h6 --fw-bold --word-break --align-center">
+                  {{ product.title }}
+                </div>
+                {%- else -%}
+                  <div class="product-card_title h6 --fw-bold --word-break --align-center">
+                    {{ 'product.title' | t }}
+                  </div>
+              {%- endif -%}
+              <strong class="product-card_price --fw-normal --align-center">
+                {%- render 'product-price', product: product, use_variant: false, show_unit_price: true -%}
+              </strong>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="carousel-card_bg-wrapper" style="--overlay-bg: {{ card.settings.background }}">
+    {%- if card.settings.image -%}
+      <div class="carousel-card_image">
+        {%- liquid
+          capture image_alt
+            if card.settings.image.alt != blank
+              echo card.settings.image.alt
+              else
+                echo card.settings.heading | escape
+            endif
+          endcapture
+
+          assign image_height = 320 | divided_by: card.settings.image.aspect_ratio | round
+        -%}
+        {%- unless index != 1 -%}
+          {{- card.settings.image | image_url: width: 1920 | image_tag:
+            class: 'object-fit object-fit--absolute',
+            fetchpriority: 'high',
+            width: 320,
+            height: image_height,
+            widths: '320, 412, 768, 992, 1260, 1350, 1440, 1640, 1920',
+            sizes: '100vw',
+            alt: image_alt
+          -}}
+          {%- else -%}
+            {{- card.settings.image | image_url: width: 1920 | image_tag:
+              class: 'object-fit object-fit--absolute',
+              loading: 'lazy',
+              width: 320,
+              height: image_height,
+              widths: '320, 412, 768, 992, 1260, 1350, 1440, 1640, 1920',
+              sizes: '100vw',
+              alt: image_alt
+            -}}
+        {%- endunless -%}
+      </div>
+      {% else %}
+        <div class="carousel-card_image">
+          {{- placeholder_image | placeholder_svg_tag: 'object-fit object-fit--absolute' -}}
+        </div>
+    {%- endif -%}
+  </div>
+</article>

@@ -1,0 +1,172 @@
+{%- comment -%}
+  renders mega menu banner on main navigation dropdown item
+  usage
+    {%- render 'mega-menu-banner', block: block, link: link, link_title: link_title, index: forloop.index, dropdown_link_title: dropdown_link_title, link_handle: link_handle -%}
+{%- endcomment -%}
+<li class="main-navigation_item mega-menu" {{ block.shopify_attributes }}>
+  <strong id="{{- link_handle -}}-{{- index -}}-mega-banner-heading-1st-level" class="visually-hidden">{{- dropdown_link_title -}}</strong>
+  <dropdown-component data-level="1">
+    <button
+      type="button"
+      class="dropdown-component_opener main-navigation_link main-navigation_link--opener"
+      aria-expanded="false"
+      aria-controls="{{- link_handle -}}-{{- index -}}-mega-banner-1st-level"
+      aria-describedby="{{- link_handle -}}-{{- index -}}-mega-banner-heading-1st-level"
+    >
+      <span class="dropdown--close dropdown-component_opener-icn dropdown-component_opener--icn-close">
+        {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'chevron-down', section_id: section_id -%}
+      </span>
+      <span class="main-navigation_link-title dropdown-component_opener-icn">{{- link_title -}}</span>
+      <span class="dropdown--open dropdown-component_opener-icn dropdown-component_opener--icn-open">
+        {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'chevron-down', section_id: section_id -%}
+      </span>
+    </button>
+    <div class="dropdown-component_wrapper main-navigation_dropdown-wrapper main-navigation_dropdown-wrapper--level1 main-navigation_dropdown-wrapper--mega-banner main-navigation_dropdown--inner-wrapper {{ color_scheme }}" id="{{- link_handle -}}-{{- index -}}-mega-banner-1st-level">
+      <div class="container">
+        <div class="mega-menu_banner-wrapper">
+          <div class="mega-menu_banner-col mega-menu_banner-col--list">
+            <ul class="list-unstyled mega-meu_list">
+              {%- if link.links -%}
+                {%- for childlink in link.links -%}
+                  {%- render 'mega-menu-item', childlink: childlink, index: forloop.index -%}
+                {%- endfor -%}
+              {%- endif -%}
+            </ul>
+          </div>
+          <div class="mega-menu_banner-col mega-menu_banner-col--others --hidden-mobile {% if banner_exists %}--style{% else %}--justify-end --fbanner{% endif %}">
+            <div class="mega-menu_product">
+              <splide-slider
+                data-slider-type="default"
+                {% if request.design_mode %}
+                  data-go-to="true"
+                {% endif %}
+              >
+                <div class="splide"
+                  data-splide='{
+                    "drag": true,
+                    "autoplay": {{- block.settings.auto_play -}},
+                    "rewind": true,
+                    "pauseOnHover": true,
+                    "padding": "3%",
+                    "perMove": 1,
+                    "pagination": false,
+                    "perPage": 1,
+                    "arrows": {{- block.settings.show_navigation -}},
+                    "interval": {{- block.settings.change_slides_every | times: 1000 -}},
+                    "type": "fade"
+                  }'
+                >
+                  <div class="splide__track">
+                    <div class="splide__list splide-slider--h-scroll" style="--init-divider: 1; --init-mob-divider: 1;">
+                      {%- if block.settings.mega_products != blank -%}
+                        {%- for product in block.settings.mega_products -%}
+                          <div class="splide__slide">
+                            {%- capture image_sizes -%}
+                              width: calc({{ settings.page_width | times: 0.335 | round }}px - 80px);
+                            {%- endcapture -%}
+                            {%- render 'mega-product-card', block: block, product: product, prefix_class: section_prefix_class, menu_media_height: media_height_class, section_prefix_class: section_prefix_class, media_height: media_height -%}
+                          </div>
+                        {%- endfor -%}
+                        {%- else -%}
+                        {%- for placeholder_card in (1..3) -%}
+                          <div class="splide__slide">
+                            {%- render 'mega-product-card-placeholder', block: block, product: product, prefix_class: section_prefix_class, index: forloop.index, menu_media_height: media_height_class, section_prefix_class: section_prefix_class -%}
+                          </div>
+                        {%- endfor -%}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                  {%- if block.settings.show_navigation or block.settings.show_pagination -%}
+                    <div class="splide-controls splide__arrows --justify-center">
+                      {%- if block.settings.show_navigation -%}
+                        <button class="splide__arrow splide__arrow--prev button button--primary button--icn">
+                          <span class="visually-hidden">{{- 'accessibility.slider.previous' | t -}}</span>
+                          {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'left-arrow' -%}
+                        </button>
+                      {%- endif -%}
+                      <ul
+                        class="splide__pagination"
+                        role="tablist"
+                        aria-label="{{- 'accessibility.slider.pagination_label' | t -}}"
+                      ></ul>
+                      {%- if block.settings.show_navigation -%}
+                        <button class="splide__arrow splide__arrow--next button button--primary button--icn">
+                          <span class="visually-hidden">{{- 'accessibility.slider.next' | t -}}</span>
+                          {%- render 'icons-data', width: 10, height: 10, use_icon: true, icon_reference: 'right-arrow' -%}
+                        </button>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </splide-slider>
+            </div>
+            {%- liquid 
+              capture banner_exists
+              if section.blocks.size > 0
+                for block in section.blocks
+                  assign banner_item_index = block.settings.banner_item_index | times: 1
+                  if block.type == 'banner' and banner_item_index == main_item_index
+                    echo 'true'
+                    break
+                  endif
+                endfor
+              else
+                echo 'false'
+              endif
+            endcapture
+            -%}
+            
+            {% if banner_exists == 'true' %}
+              <div class="mega-menu_banner mega-menu_banners-col">
+                <splide-slider
+                  data-slider-type="default"
+                  {% if request.design_mode %}
+                    data-go-to="true"
+                  {% endif %}
+                >
+                  <div class="splide featured-banner_slider"
+                    data-splide='{
+                      "drag": true,
+                      "autoplay": {{- section.settings.banner_auto_play -}},
+                      "rewind": true,
+                      "gap": "0",
+                      "perMove": 1,
+                      "pagination": {{ section.settings.banner_show_pagination }},
+                      "perPage": 1,
+                      "arrows": false,
+                      "interval": {{- section.settings.banner_change_slides_every | times: 1000 -}},
+                      "type": "fade"
+                    }'
+                  >
+                    <div class="splide__track">
+                      <div class="splide__list splide-slider--h-scroll" style="--init-divider: 1; --init-mob-divider: 1;">
+                        {%- for block in section.blocks -%}
+                          {%- liquid 
+                            assign banner_item_index = block.settings.banner_item_index | times: 1
+                          -%}
+                          {%- capture image_sizes -%}
+                            width: calc({{ settings.page_width | times: 0.335 | round }}px - 60px);
+                          {%- endcapture -%}
+                          {%- if block.type == 'banner' and banner_item_index == main_item_index -%}
+                            <div class="splide__slide" {{ block.shopify_attributes }}>
+                              {%- render 'featured-banner', block: block, index: forloop.index, media_size: section.settings.product_media_size, loading_attr: 'lazy', sizes: image_sizes, widths: '280, 300, 360', max_width: '360', banner_media_height: media_height_class -%}
+                            </div>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                    {%- if section.settings.banner_show_pagination -%}
+                      <div class="splide-controls --justify-end">
+                        <ul class="splide__pagination" role="tablist" aria-label="{{- 'accessibility.slider.pagination_label' | t -}}"></ul>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </splide-slider>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </dropdown-component>
+</li>
